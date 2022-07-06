@@ -2,7 +2,8 @@ class UsersController < ApplicationController
 
     def show
         user = User.find(session[:user_id])
-        render json: user, status: :ok
+        # user = User.find(params[:id])
+        render json: user, include: [user_trails: :trail, user_lodgings: :lodging, user_foods: :food], status: :ok
     end
 
     def create

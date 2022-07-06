@@ -14,6 +14,7 @@ import NewFoodForm from './components/NewFoodForm';
 import LodgingContainer from './components/LodgingContainer';
 import LodgingPage from './components/LodgingPage'
 import NewLodgingForm from './components/NewLodgingForm';
+import UserPage from './components/UserPage';
 
 function App() {
 
@@ -82,7 +83,7 @@ function App() {
           Logout
         </Route>
         <Route exact path = "/me">
-          Me
+          <UserPage />
         </Route>
       </Switch>
     </ChakraProvider>

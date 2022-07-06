@@ -91,7 +91,7 @@ function NavBar({isLoggedIn, handleLSLoggedIn}){
               About
             </Link>
             <h1 className="navbar-title">National Parks</h1>
-            <Accordion defaultIndex={[0]} allowMultiple>
+            <Accordion  allowMultiple>
               <AccordionItem>
                 <h2>
                   <AccordionButton>
