@@ -61,7 +61,7 @@ function App() {
           <NewFoodForm isLoggedIn={isLoggedIn}/>
         </Route>
         <Route exact path = "/yosemite/food/:id">
-          <FoodPage />
+          <FoodPage isLoggedIn={isLoggedIn}/>
         </Route>
         <Route exact path = "/yosemite/trails">
           <TrailsContainer />
@@ -70,7 +70,7 @@ function App() {
           <NewTrailForm isLoggedIn={isLoggedIn}/>
         </Route>
         <Route exact path = "/yosemite/trails/:id">
-          <TrailPage />
+          <TrailPage isLoggedIn={isLoggedIn}/>
         </Route>
         <Route exact path = "/login">
           <Login handleLSLoggedIn={handleLSLoggedIn}/>

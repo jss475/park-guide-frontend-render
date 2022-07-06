@@ -1,10 +1,10 @@
 import {useState, useEffect} from 'react'
 import {useLocation} from 'react-router-dom'
-import {Heading, Box, Image, Text, Flex, Spacer, Link, Divider, Avatar, TableContainer, Table, Tbody, Td, Tr, Icon} from '@chakra-ui/react'
+import {Heading, Box, Image, Text, Flex, Spacer, Link, Divider, Avatar, FormControl, FormLabel, Textarea, Button, TableContainer, Table, Tbody, Td, Tr, Icon} from '@chakra-ui/react'
 import {FiExternalLink} from 'react-icons/fi'
 import {BiUpvote, BiDownvote} from 'react-icons/bi'
 
-function FoodPage(){
+function FoodPage({isLoggedIn}){
     
     //get the id Data from the history push with UseLocation
     //set the data for the food
@@ -13,6 +13,7 @@ function FoodPage(){
         pictures: [],
         user_foods: [{reviews: '', user: {name: ''}}]
     })
+    const [reviewAdded, setReviewAdded] = useState()
 
     //pull the food data for just the one food
     useEffect(()=> {
@@ -68,8 +69,37 @@ function FoodPage(){
             .then(data => setFoodData(data))
     }
 
+    //handle review change
+    function handleReviewChange(e){
+        setReviewAdded(e.target.value)
+    }
+
+    //handle adding a review if logged in
+    function handleAddReview(e){
+        e.preventDefault()
+        //reset the form fields
+        e.target.reset()
+        const user_id = localStorage.getItem("id")
+        const configObj = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                user_id: user_id,
+                food_id: id,
+                review: reviewAdded,
+            })
+        }
+
+        fetch('/user_foods/', configObj)
+            .then(res => res.json())
+            .then(data => setFoodData({...foodData, "user_foods": [...foodData.user_foods,data]}))
+    }
+    
+
     //refactor the food data into its attributes
-    const {id, name, address, website, proximity, pictures, food_type, description, user_foods, upvote, downvote} = foodData
+    let {id, name, address, website, proximity, pictures, food_type, description, user_foods, upvote, downvote} = foodData
 
     //map out the reviews with the user name
     let reviews = user_foods.map(uf => {
@@ -143,20 +173,20 @@ function FoodPage(){
             </Box>
 
             {/* If logged in you can leave a review */}
-            {/* {isLoggedIn ? 
+            {isLoggedIn ? 
                 <>
                     <form onSubmit={handleAddReview} >
                         <Box w="80%" ml="auto" mr="auto" mt="50px">
                             <FormControl isRequired  >
                                 <FormLabel>Add a Review!</FormLabel>
-                                <Textarea></Textarea>            
+                                <Textarea onChange={handleReviewChange}></Textarea>            
                             </FormControl>
                             <Button type="submit" float="right" mt="10px"  mb="50px">Submit</Button>
                         </Box>
                     </form>
                 </>
         
-            : null} */}
+            : null}
 
             {/* Add reviews */}
             <Text fontSize='2xl' fontWeight="semibold" ml="25px" mt="50px">User Reviews</Text>

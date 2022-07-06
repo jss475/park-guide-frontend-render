@@ -11,6 +11,7 @@ function LodgingPage({isLoggedIn}){
     const [lodgingData, setLodgingData] = useState({
         user_lodgings: [{reviews: '', user: {name: ''}}]
     })
+    const [reviewAdded, setReviewAdded] = useState()
 
     //pull the food data for just the one food
     useEffect(()=> {
@@ -19,6 +20,7 @@ function LodgingPage({isLoggedIn}){
         
             if (req.ok) {
                 let res = await req.json();
+                console.log(res)
                 setLodgingData(res);
             } else {
                 console.error("whoops");
@@ -67,19 +69,36 @@ function LodgingPage({isLoggedIn}){
             .then(data => setLodgingData(data))
     }
 
+    //handle review change
+    function handleReviewChange(e){
+        setReviewAdded(e.target.value)
+    }
+
     //handle adding a review if logged in
     function handleAddReview(e){
         e.preventDefault()
+        //reset the form fields
+        e.target.reset()
         const user_id = localStorage.getItem("id")
         const configObj = {
-            
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                user_id: user_id,
+                lodging_id: id,
+                review: reviewAdded,
+            })
         }
 
-        fetch('/user_trails/', configObj)
+        fetch('/user_lodgings/', configObj)
+            .then(res => res.json())
+            .then(data => setLodgingData({...lodgingData, "user_lodgings": [...lodgingData.user_lodgings,data]}))
     }
 
     //refactor the lodging data into its attributes 
-    const {id, name, address, website, lodging_amenity, room_amenity, upvote, downvote, image, user_lodgings} = lodgingData
+    let {id, name, address, website, lodging_amenity, room_amenity, upvote, downvote, image, user_lodgings} = lodgingData
  
     //map out the reviews with the user name
     let reviews = user_lodgings.map(ul => {
@@ -174,7 +193,7 @@ function LodgingPage({isLoggedIn}){
                         <Box w="80%" ml="auto" mr="auto" mt="50px">
                             <FormControl isRequired  >
                                 <FormLabel>Add a Review!</FormLabel>
-                                <Textarea></Textarea>            
+                                <Textarea onChange={handleReviewChange}></Textarea>            
                             </FormControl>
                             <Button type="submit" float="right" mt="10px"  mb="50px">Submit</Button>
                         </Box>

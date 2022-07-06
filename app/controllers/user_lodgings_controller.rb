@@ -11,7 +11,7 @@ class UserLodgingsController < ApplicationController
     
     def create
         ul = UserLodging.create!(ul_params)
-        render json: ul, status: :created
+        render json: ul, status: :created, serializer: CreateUlSerializer
     end
 
     def update

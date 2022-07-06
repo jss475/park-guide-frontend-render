@@ -17,7 +17,8 @@ import { Text, Image, Table,
     Icon,
     Divider,
     Box,
-    Avatar
+    Avatar,
+    FormControl, FormLabel, Textarea, Button
 } from "@chakra-ui/react"
 import {GiHamburger, GiWaterDrop} from 'react-icons/gi'
 import {BiUpvote, BiDownvote} from 'react-icons/bi'
@@ -25,11 +26,13 @@ import {GoogleMap, useLoadScript, Marker} from "@react-google-maps/api"
 import '../trailpage.css'
 
 
-function TrailPage(){
+function TrailPage({isLoggedIn}){
     //get pathname to retrieve the ID of the trail that was clicked
     const {pathname, state} = useLocation()
     // let trailId = pathname[pathname.length-1]
 
+    //review added state
+    const [reviewAdded, setReviewAdded] = useState()
     //create state to take in trail data
     const [trailData, setTrailData] = useState({
         id: '',
@@ -125,6 +128,34 @@ function TrailPage(){
             .then(res => res.json())
             .then(data => setTrailData(data))
     }
+
+    //handle review change
+    function handleReviewChange(e){
+        setReviewAdded(e.target.value)
+    }
+
+    //handle adding a review if logged in
+    function handleAddReview(e){
+        e.preventDefault()
+        //reset the form fields
+        e.target.reset()
+        const user_id = localStorage.getItem("id")
+        const configObj = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                user_id: user_id,
+                trail_id: id,
+                review: reviewAdded,
+            })
+        }
+
+        fetch('/user_trails/', configObj)
+            .then(res => res.json())
+            .then(data => setTrailData({...trailData, "user_trails": [...trailData.user_trails,data]}))
+        }
 
     //map out the reviews with the user name
     let reviews = user_trails.map(ut => {
@@ -237,7 +268,21 @@ function TrailPage(){
                 </Flex>
             </Flex>
 
-           
+            {/* If logged in you can leave a review */}
+            {isLoggedIn ? 
+                <>
+                    <form onSubmit={handleAddReview} >
+                        <Box w="80%" ml="auto" mr="auto" mt="50px">
+                            <FormControl isRequired  >
+                                <FormLabel>Add a Review!</FormLabel>
+                                <Textarea onChange={handleReviewChange}></Textarea>            
+                            </FormControl>
+                            <Button type="submit" float="right" mt="10px"  mb="50px">Submit</Button>
+                        </Box>
+                    </form>
+                </>
+        
+            : null}
             {/* <Divider mt="50px"/> */}
 
             {/* Add reviews */}
