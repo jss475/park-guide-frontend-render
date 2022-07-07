@@ -35,7 +35,7 @@ function App() {
     val ? localStorage.setItem('id',id) : localStorage.removeItem('id')
   }
 
-  console.log(isLoggedIn)
+  
   return (
     <ChakraProvider>
       <NavBar isLoggedIn={isLoggedIn} handleLSLoggedIn={handleLSLoggedIn}/>

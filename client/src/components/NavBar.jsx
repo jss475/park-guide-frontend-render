@@ -86,10 +86,21 @@ function NavBar({isLoggedIn, handleLSLoggedIn}){
             </Link>
           </DrawerHeader>
           {/* This is where I put in the links */}
+          {/* this is when logged in you have the me page show up */}
           <DrawerBody>
-            <Link as={ReactLink} to='/about' className="navbar-about" onClick={onClose}>
-              About
-            </Link>
+            {isLoggedIn ? 
+              <Box mb="15px">
+                  <Link as={ReactLink} to='/me' onClick={onClose}>
+                    Me!
+                  </Link>
+              </Box>
+             : null }
+            <Box>
+              <Link as={ReactLink} to='/about' className="navbar-about" onClick={onClose}>
+                About
+              </Link>
+            </Box>
+            
             <h1 className="navbar-title">National Parks</h1>
             <Accordion  allowMultiple>
               <AccordionItem>

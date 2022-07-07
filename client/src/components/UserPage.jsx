@@ -51,6 +51,7 @@ function UserPage(){
         let days = days_since_created%365
         timeMessage = `${years} year(s) and ${days} day(s)`
     }
+    ////////////////////////////////////////////////////////////////////////////////////////
 
     return (
         <>
@@ -77,6 +78,7 @@ function UserPage(){
                         return (
                         <>
                             <AccordionPanel>
+                                <Divider />
                                 <Text fontSize="lg" fontWeight = "semibold" key={ut.id}>{ut.trail.name}</Text> 
                                 <Text >{ut.review}</Text>
                             </AccordionPanel>
