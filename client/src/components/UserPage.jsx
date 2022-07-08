@@ -77,11 +77,13 @@ function UserPage(){
                     user_trails.map(ut => {
                         return (
                         <>
-                            <AccordionPanel>
-                                <Divider />
-                                <Text fontSize="lg" fontWeight = "semibold" key={ut.id}>{ut.trail.name}</Text> 
-                                <Text >{ut.review}</Text>
-                            </AccordionPanel>
+                            {ut["review"] ?
+                                <AccordionPanel>
+                                    <Divider />
+                                    <Text fontSize="lg" fontWeight = "semibold" key={ut.id}>{ut.trail.name}</Text> 
+                                    <Text >{ut["review"]}</Text>
+                                </AccordionPanel>
+                            : null}
                         </>
                         )
                     })
@@ -107,10 +109,12 @@ function UserPage(){
                     user_lodgings.map(ul => {
                         return (
                         <>
-                            <AccordionPanel>
-                                <Text fontSize="lg" fontWeight = "semibold" key={ul.id}>{ul.lodging.name}</Text> 
-                                <Text >{ul.review}</Text>
-                            </AccordionPanel>
+                            {ul["review"] ?
+                                <AccordionPanel>
+                                    <Text fontSize="lg" fontWeight = "semibold" key={ul.id}>{ul.lodging.name}</Text> 
+                                    <Text >{ul["review"]}</Text>
+                                </AccordionPanel>
+                            : null}
                         </>
                         )
                     })
@@ -134,14 +138,74 @@ function UserPage(){
                     user_foods.map(uf => {
                         return (
                         <>
-                            <AccordionPanel>
-                                <Text fontSize="lg" fontWeight = "semibold" key={uf.id}>{uf.food.name}</Text> 
-                                <Text >{uf.review}</Text>
-                            </AccordionPanel>
+                            {uf["review"] ? 
+                                <AccordionPanel>
+                                    <Text fontSize="lg" fontWeight = "semibold" key={uf.id}>{uf.food.name}</Text> 
+                                    <Text >{uf["review"]}</Text>
+                                </AccordionPanel>
+                            : null}
                         </>
                         )
                     })
                 : null}
+                {userData ? 
+                    user_lodgings.map(ul => {
+                        return (
+                        <>
+                            {ul["review"] ?
+                                <AccordionPanel>
+                                    <Text fontSize="lg" fontWeight = "semibold" key={ul.id}>{ul.lodging.name}</Text> 
+                                    <Text >{ul["review"]}</Text>
+                                </AccordionPanel>
+                            : null}
+                        </>
+                        )
+                    })
+                : null}
+                {userData ? 
+                    user_trails.map(ut => {
+                        return (
+                        <>
+                            {ut["review"] ?
+                                <AccordionPanel>
+                                    <Divider />
+                                    <Text fontSize="lg" fontWeight = "semibold" key={ut.id}>{ut.trail.name}</Text> 
+                                    <Text >{ut["review"]}</Text>
+                                </AccordionPanel>
+                            : null}
+                        </>
+                        )
+                    })
+                : null}
+                </AccordionItem>
+            </Accordion>
+
+            {/* accordion for all favorites */}
+            <Accordion defaultIndex={[0]} allowMultiple>
+                <AccordionItem>
+                        <AccordionButton>
+                            <Flex w="100%">
+                                <Heading textAlign="left" size="md" w="60%">Favorites</Heading>
+                                <Text w = "40%">Click to see your favorites!</Text>
+                            </Flex>
+                            
+                            <AccordionIcon />
+                        </AccordionButton>
+                    
+                    {userData ? 
+                        user_foods.map(uf => {
+                            return (
+                            <>
+                                {uf["favorite?"]===true ? 
+                                    <AccordionPanel>
+                                        <Text fontSize="lg" fontWeight = "semibold" key={uf.id}>{uf.food.name}</Text> 
+                                        {/* <Text >{uf["review"]}</Text> */}
+                                    </AccordionPanel>
+                                : null}
+                            </>
+                            )
+                        })
+                    : null}
                 </AccordionItem>
             </Accordion>
 

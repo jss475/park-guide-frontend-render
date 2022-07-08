@@ -15,7 +15,7 @@ class LodgingsController < ApplicationController
     end
 
     def update
-        lodging_find.update!(lodging_params)
+        lodging_find.update!(lodging_params_no_upvote_or_downvote)
         render json: lodging_find, status: :ok
     end
 
@@ -28,10 +28,15 @@ class LodgingsController < ApplicationController
 
 
     def lodging_params
-        params.permit(:name, :address, :website, :proximity, :upvote, :downvote, :image, :lodging_amenity => [], :room_amenity =>[])
+        params.permit(:id, :name, :address, :website, :proximity, :upvote, :downvote, :image, :lodging_amenity => [], :room_amenity =>[])
+    end
+
+    def lodging_params_no_upvote_or_downvote
+        params.permit(:id, :name, :address, :website, :proximity, :image, :lodging_amenity => [], :room_amenity =>[])
     end
 
     def lodging_find
         Lodging.find(params[:id])
     end
+
 end

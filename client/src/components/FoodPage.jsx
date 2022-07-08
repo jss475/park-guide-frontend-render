@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import {useLocation, useParams} from 'react-router-dom'
+import {useParams} from 'react-router-dom'
 import {Heading, Box, Image, Text, Flex, Spacer, Link, Divider, Avatar, FormControl, FormLabel, Textarea, Button, TableContainer, Table, Tbody, Td, Tr, Icon} from '@chakra-ui/react'
 import {FiExternalLink} from 'react-icons/fi'
 import {BiUpvote, BiDownvote} from 'react-icons/bi'
@@ -8,9 +8,7 @@ import {FaStar, FaRegStar} from 'react-icons/fa'
 function FoodPage({isLoggedIn}){
     
     //get id of the food page
-    let { id } = useParams()
-
-
+    const { id } = useParams()
     //set state for retrieving the data to this specific food page
     const [foodData, setFoodData] = useState({
         pictures: [],
@@ -36,41 +34,62 @@ function FoodPage({isLoggedIn}){
             }
             };
             getFood();
-    },[])
+    },[id])
+
     //on click for the upvote
     function handleUpvoteClick(){
+        const user_id = localStorage.getItem("id")
         const configObj = {
-            method: "PATCH",
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 'Accept': 'application/json',
             },
             mode: "cors",
             body: JSON.stringify({
-                upvote: upvote+1
+                user_id: user_id,
+                food_id: id
             })
         }
-        fetch(`/foods/${id}`,configObj)
+
+    
+        fetch(`/user_foods/upvote`,configObj)
             .then(res => res.json())
-            .then(data => setFoodData(data))
+            .then(data => {
+                if(data.error){
+                    console.log(data.error)
+                }else{
+                    setFoodData(data)
+                }
+            })
     }
 
     //on click for the downvote
     function handleDownvoteClick(){
+        const user_id = localStorage.getItem("id")
         const configObj = {
-            method: "PATCH",
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 'Accept': 'application/json',
             },
             mode: "cors",
             body: JSON.stringify({
-                downvote: downvote+1
+                user_id: user_id,
+                food_id: id
             })
         }
-        fetch(`/foods/${id}`,configObj)
+
+    
+        fetch(`/user_foods/downvote`,configObj)
             .then(res => res.json())
-            .then(data => setFoodData(data))
+            .then(data => {
+                if(data.error){
+                    console.log(data.error)
+                }else{
+                    setFoodData(data)
+                }
+            })
     }
 
 
@@ -100,67 +119,78 @@ function FoodPage({isLoggedIn}){
             })
         }
         fetch('/user_foods/', configObj)
-            .then(res => res.json())
-            .then(data => setFoodData({...foodData, "user_foods": [...foodData.user_foods,data]}))
+        .then(res => res.json())
+        .then(data => {
+            let filter_id
+            if(data.id){
+                filter_id = data.id
+            }else{
+                filter_id = data[0].id
+            }
+            //see if this user trail table/data exists already
+            let filteredIndex
+            let filtered_data = foodData.user_foods.filter((uf,index) => {
+                filteredIndex = index
+                return uf.id === filter_id})
+  
+            //if it exists, replace the old isntance and replace with the new instance
+            if(filtered_data.length > 0) {
+                let mutable_foodData = {...foodData}
+                mutable_foodData.user_foods.splice(+filteredIndex,1)
+                filtered_data[0]["review"]=reviewAdded
+                mutable_foodData.user_foods.push(filtered_data[0])
+                setFoodData(mutable_foodData)
+            //if it doesn't exist, add the new instance
+            }else{
+                let mutable_foodData = {...foodData}
+                mutable_foodData.user_foods.push(data)
+                setFoodData(mutable_foodData)
+            }
+        })
     }
 
     //handle clicking the favorite button
     function handleFavClick(){
         setFavClicked(prev => !prev)
         const user_id = localStorage.getItem("id")
-        //since state doesn't change immediately when clicked to favorite, the value returned by favClicked is false even though we expect true
-        //that's why following logic is as below
 
-        //need to check if user_foods table exists for this user and food combo
-        const find_uf = findUserFood()
-        //if the instance exists, then patch. If not, post
-        //state doesn't update whiel in this function so the bang operator is needed to submit correct value
-        if(find_uf.length > 0){
-            const configObj = {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    "favorite?": !favClicked 
-                })
-            }
-            fetch(`/user_foods/${find_uf[0].id}`, configObj)
-                .then(res => res.json())
-                .then(data => console.log(data))
-        }else{
-            const configObj = {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    user_id: user_id,
-                    food_id: id,
-                    "favorite?": !favClicked
-                })
-            }
-            fetch('/user_foods/', configObj)
+        //need bang operator since state change is async
+        const configObj = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                user_id: user_id,
+                food_id: id,
+                "favorite?": !favClicked
+            })
+        }
+
+        fetch('/user_foods', configObj)
             .then(res => res.json())
-            .then(data => console.log(data))
-        }
+            .then(data => {
+                
+                let filter_id = data.id
+                let filteredIndex
+                let filtered_data = foodData.user_foods.filter((uf,index)=> {
+                    filteredIndex = index
+                    return uf.id === filter_id
+                })
+
+                let mutable_foodData = {...foodData}
+                if(filtered_data.length > 0){
+                    mutable_foodData.user_foods.splice(+filteredIndex,1)
+                    filtered_data[0]["favorite?"] = !favClicked
+                    mutable_foodData.user_foods.push(filtered_data[0])
+                    setFoodData(mutable_foodData)
+                }else{
+                    mutable_foodData.user_foods.push(data)
+                    setFoodData(mutable_foodData)
+                }
+            })
     }
 
-    //function to find user food
-    function findUserFood(){
-        const user_id = localStorage.getItem("id")
-        let find_uf = user_foods.filter(uf => +uf.user.id === +user_id && +uf.food.id === +id)
-        if(find_uf.length > 0){
-            return find_uf
-        }else{
-            return []
-        }
-    }
-
-    
-    // console.log(alreadyClicked)
-
-    
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //refactor the food data into its attributes
@@ -174,41 +204,52 @@ function FoodPage({isLoggedIn}){
     useEffect(() => {
         let found = findFirstTime()
         setAlreadyClicked(found)
+        setFavClicked(found)
     },[foodData])
 
     //find first instance of favorite click
     function findFirstTime(){
         const user_id = localStorage.getItem("id")
-        let find_uf = user_foods.filter(uf => +uf.user.id === +user_id && +uf.food.id === +id)
-        if(find_uf.length > 0){
-            if(find_uf[0]["favorite?"] === true){
-                return true
+        if(user_foods && isLoggedIn){
+            let find_uf = user_foods.filter(uf => +uf.user.id === +user_id && +uf.food.id === +id)
+            if(find_uf.length > 0){
+                if(find_uf[0]["favorite?"] === true){
+                    return true
+                }else{
+                    return false
+                }
             }else{
                 return false
             }
-        }else{
-            return false
         }
+
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
         
     //map out the reviews with the user name
-    let reviews = user_foods.map(uf => {
-        return (
-            <div key={uf.id}>
-                <Divider mt="15px"/>
-                <Box mt="25px" ml="25px" mb="25px">
-                    <Flex flexWrap="inline">
-                        <Avatar name={uf.user.name} src='https://bit.ly/broken-link' />
-                        <Text mt="1%" ml="10px">{uf.user.name}</Text>
-                    </Flex>
-                    <Text mt="15px">{uf.review}</Text>
-                </Box>
-            </div>
-    
-        )
-    })
+   let reviews = []
+   if(user_foods){
+    reviews = user_foods.map(uf => {
+        if(uf["review"]){
+            return (
+                <div key={uf.id}>
+                    <Divider mt="15px"/>
+                    <Box mt="25px" ml="25px" mb="25px">
+                        <Flex flexWrap="inline">
+                            <Avatar name={uf.user.name} src='https://bit.ly/broken-link' />
+                            <Text mt="1%" ml="10px">{uf.user.name}</Text>
+                        </Flex>
+                        <Text mt="15px">{uf["review"]}</Text>
+                    </Box>
+                </div>
+        
+            )
+        }
+     })
+
+   }
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     return (
         <>

@@ -11,6 +11,7 @@ function LodgingContainer(){
 
             if (req.ok){
                 let res = await req.json()
+                console.log(res)
                 setAllLodging(res)
             }else{
                 console.error("No data :(")
