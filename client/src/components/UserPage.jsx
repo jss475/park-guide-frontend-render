@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
-import {Divider, Grid, GridItem, Avatar, Text, Box, Flex, Heading, Image, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon} from '@chakra-ui/react'
+import {useHistory} from 'react-router-dom'
+import {Grid, GridItem, Avatar, Text, Box, Flex, Heading, Image, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon} from '@chakra-ui/react'
 import '../user.css'
 
 function UserPage(){
@@ -10,8 +11,19 @@ function UserPage(){
         user_lodgings: []
     })
 
-    //create time message
-    // const [timeMessage, setTimeMessage] = useState()
+    //create history
+    const history = useHistory()
+
+    //push function
+    function handlePlaceClick(id,type){
+        if(type === 'food'){
+            history.push(`/yosemite/food/${id}`)
+        }else if(type === "lodging"){
+            history.push(`/yosemite/lodging/${id}`)
+        }else if(type === "trails"){
+            history.push(`/yosemite/trails/${id}`)
+        }
+    }
 
     //fetch specific user data
     useEffect(()=> {
@@ -90,11 +102,11 @@ function UserPage(){
                                 return (
                                     <div>
                                         {uf["favorite?"]===true ? 
-                                            <GridItem className="user-card">
-                                            <AccordionPanel>
-                                                <Text  noOfLines={1} fontSize="lg" fontWeight = "semibold" key={uf.id}>{uf.food.name}</Text> 
-                                                <Image className="place-image" src={uf.food.pictures[0]} alt="User Food"/>
-                                            </AccordionPanel>
+                                            <GridItem className="user-card" onClick={()=>handlePlaceClick(uf.food.id,'food')}>
+                                                <AccordionPanel>
+                                                    <Text  noOfLines={1} fontSize="lg" fontWeight = "semibold" key={uf.id}>{uf.food.name}</Text> 
+                                                    <Image className="place-image" src={uf.food.pictures[0]} alt="User Food"/>
+                                                </AccordionPanel>
                                             </GridItem>
                                         : null}
                                     </div>
@@ -106,11 +118,11 @@ function UserPage(){
                             return (
                             <div >
                                 {ul["favorite?"]===true  ?
-                                <GridItem className="user-card">
-                                    <AccordionPanel>
-                                        <Text noOfLines={1} fontSize="lg" fontWeight = "semibold" key={ul.id}>{ul.lodging.name}</Text> 
-                                        <Image className="place-image" src={ul.lodging.image} alt="User Lodging" />
-                                    </AccordionPanel>
+                                    <GridItem className="user-card" onClick={()=>handlePlaceClick(ul.lodging.id,'lodging')}>
+                                        <AccordionPanel>
+                                            <Text noOfLines={1} fontSize="lg" fontWeight = "semibold" key={ul.id}>{ul.lodging.name}</Text> 
+                                            <Image className="place-image" src={ul.lodging.image} alt="User Lodging" />
+                                        </AccordionPanel>
                                     </GridItem>
                                 : null}
                             </div>
@@ -122,12 +134,12 @@ function UserPage(){
                                 return (
                                 <div >
                                     {ut["favorite?"]===true  ?
-                                    <GridItem className="user-card">
-                                        <AccordionPanel>
-                                            {/* <Divider /> */}
-                                            <Text noOfLines={1} fontSize="lg" fontWeight = "semibold" key={ut.id}>{ut.trail.name}</Text> 
-                                            <Image className="place-image" src={ut.trail.pictures[0]} alt="User User Trail" />
-                                        </AccordionPanel>
+                                        <GridItem className="user-card" onClick={()=>handlePlaceClick(ut.trail.id,'trails')}>
+                                            <AccordionPanel>
+                                                {/* <Divider /> */}
+                                                <Text noOfLines={1} fontSize="lg" fontWeight = "semibold" key={ut.id}>{ut.trail.name}</Text> 
+                                                <Image className="place-image" src={ut.trail.pictures[0]} alt="User User Trail" />
+                                            </AccordionPanel>
                                         </GridItem>
                                     : null}
                                 </div>
@@ -155,12 +167,12 @@ function UserPage(){
                                 return (
                                 <>
                                     {ut["review"] ?
-                                    <GridItem>
-                                        <AccordionPanel>
-                                            <Text fontSize="lg" fontWeight = "semibold" key={ut.id}>{ut.trail.name}</Text> 
-                                            <Text >{ut["review"]}</Text>
-                                            <Image className="place-image" src={ut.trail.pictures[0]} alt="User Trail"/>
-                                        </AccordionPanel>
+                                        <GridItem onClick={()=>handlePlaceClick(ut.trail.id,'trails')}>
+                                            <AccordionPanel>
+                                                <Text noOfLines={1} fontSize="lg" fontWeight = "semibold" key={ut.id}>{ut.trail.name}</Text> 
+                                                <Text noOfLines={1} >{ut["review"]}</Text>
+                                                <Image className="place-image" src={ut.trail.pictures[0]} alt="User Trail"/>
+                                            </AccordionPanel>
                                         </GridItem>
                                     : null}
                                 </>
@@ -190,12 +202,12 @@ function UserPage(){
                             return (
                             <>
                                 {ul["review"] ?
-                                <GridItem>
-                                    <AccordionPanel>
-                                        <Text fontSize="lg" fontWeight = "semibold" key={ul.id}>{ul.lodging.name}</Text> 
-                                        <Text >{ul["review"]}</Text>
-                                        <Image className="place-image" src={ul.lodging.image} alt="User Lodging"/>
-                                    </AccordionPanel>
+                                    <GridItem onClick={()=>handlePlaceClick(ul.lodging.id,'lodging')}>
+                                        <AccordionPanel>
+                                            <Text noOfLines={1} fontSize="lg" fontWeight = "semibold" key={ul.id}>{ul.lodging.name}</Text> 
+                                            <Text noOfLines={1}>{ul["review"]}</Text>
+                                            <Image className="place-image" src={ul.lodging.image} alt="User Lodging"/>
+                                        </AccordionPanel>
                                     </GridItem>
                                 : null}
                             </>
@@ -207,7 +219,7 @@ function UserPage(){
             </Accordion>
 
             {/* accordion for user_foods */}
-            <Accordion allowMultiple>
+            <Accordion allowMultiple mb="50px">
                 <AccordionItem>
                     <AccordionButton>
                         <Flex w="100%">
@@ -223,10 +235,10 @@ function UserPage(){
                             return (
                             <>
                                 {uf["review"] ? 
-                                    <GridItem>
+                                    <GridItem onClick={()=>handlePlaceClick(uf.food.id,'food')}>
                                         <AccordionPanel>
-                                            <Text fontSize="lg" fontWeight = "semibold" key={uf.id}>{uf.food.name}</Text> 
-                                            <Text >{uf["review"]}</Text>
+                                            <Text noOfLines={1} fontSize="lg" fontWeight = "semibold" key={uf.id}>{uf.food.name}</Text> 
+                                            <Text noOfLines={1}>{uf["review"]}</Text>
                                             <Image className="place-image" src={uf.food.pictures[0]} alt="User Food"/>
                                         </AccordionPanel>
                                     </GridItem>
