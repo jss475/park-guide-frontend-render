@@ -1,10 +1,11 @@
 import {useHistory, useLocation} from 'react-router-dom'
-import {Box, Image} from '@chakra-ui/react'
+import {Box, Image, Text, Flex, Icon} from '@chakra-ui/react'
+import {BiUpvote, BiDownvote} from 'react-icons/bi'
 
 function LodgingCard({lodging}){
 
     //refactor the lodging instance
-    const {id, name, website, lodging_amenity, room_amenity, upvote, downvote, image} = lodging
+    const {id, name, upvote, downvote, image} = lodging
 
     //create history to push
     const history = useHistory()
@@ -23,8 +24,8 @@ function LodgingCard({lodging}){
     
     return (
         <>
-        <Box w="28%" borderWidth='1px' borderRadius='lg' overflow='hidden' m='5' onClick={handleLodgingCardClick}>
-          <Image src={image} alt="Picture of lodging" w="100%" height="150px" pl="10px" pr="10px" pt="10px" borderRadius="20px"/>
+        <Box w="calc(100% * (1/4) - 25px - 20px)" height="320px" borderWidth='1px' borderRadius='lg' overflow='hidden' m='5' onClick={handleLodgingCardClick}>
+          <Image src={image} alt="Picture of lodging" w="100%"  pl="10px" pr="10px" pt="10px" borderRadius="20px"/>
             <Box p='6'>
                 {/* difficult + route_type + estimate_time */}
                 <Box display='flex' alignItems='baseline'>
@@ -49,6 +50,25 @@ function LodgingCard({lodging}){
                     >
                     {name}
                 </Box>
+                <Flex 
+                    flexWrap="inline"
+                    color='gray.500'
+                    fontWeight='semibold'
+                    letterSpacing='wide'
+                    fontSize='sm'
+                    textTransform='uppercase'
+                    ml='0'
+                >
+                    <Flex>
+                        <Icon as={BiUpvote} mt="4px"/>
+                        <Text>{upvote}</Text>
+                    </Flex>
+                    <Flex>
+                        <Icon as={BiDownvote} ml = "15px" mt="4px"/>
+                        <Text >{downvote}</Text>
+                    </Flex>
+                    
+                </Flex>
 
             </Box>
         </Box>

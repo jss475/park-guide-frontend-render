@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import {Divider, Avatar, Text, Box, Flex, Heading, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon} from '@chakra-ui/react'
-
+import {Divider, Grid, GridItem, Avatar, Text, Box, Flex, Heading, Image, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon} from '@chakra-ui/react'
+import '../user.css'
 
 function UserPage(){
     //create state for storing all user data
@@ -29,7 +29,7 @@ function UserPage(){
     },[])
 
     const {email, name, user_foods, user_lodgings, user_trails, created_at} = userData
-
+    console.log(userData)
 
     //calculate days you've been a member
     const current = new Date()
@@ -56,13 +56,82 @@ function UserPage(){
     return (
         <>
         <Box w="80%" mt="40px" ml="auto" mr="auto">
-            <Avatar name = {name} src="https://bit.ly/broken-link" />
-            <Text>{name}</Text>
-            <Text>{email}</Text>
-            <Text>Member since: {timeMessage}</Text>
+            <Box textAlign="center">
+                <Avatar name = {name} src="https://bit.ly/broken-link" />
+                <Text>{name}</Text>
+                <Text>{email}</Text>
+                <Text>Member since: {timeMessage}</Text>
+            </Box>
+
+            {/* accordion for all favorites */}
+            <Accordion defaultIndex={[0]} allowMultiple mt="50px">
+                <AccordionItem>
+                        <AccordionButton>
+                            <Flex w="100%">
+                                <Heading textAlign="left" size="md" w="60%">Favorites</Heading>
+                                <Text w = "40%">Click to see your favorites!</Text>
+                            </Flex>
+                            
+                            <AccordionIcon />
+                        </AccordionButton>
+                    <Flex flexDirection="row" flexWrap="wrap">
+
+                        {userData ? 
+                            user_foods.map(uf => {
+                                console.log(uf)
+                                return (
+                                    <div>
+                                        {uf["favorite?"]===true ? 
+                                            <div className="user-card">
+                                            <AccordionPanel>
+                                                <Text  fontSize="lg" fontWeight = "semibold" key={uf.id}>{uf.food.name}</Text> 
+                                                <Image className="place-image" src={uf.food.pictures[0]} alt="User Food"/>
+                                            </AccordionPanel>
+                                            </div>
+                                        : null}
+                                    </div>
+                                )
+                            })
+                        : null}
+                                        {userData ? 
+                        user_lodgings.map(ul => {
+                            return (
+                            <div >
+                                {ul["favorite?"]===true  ?
+                                <div className="user-card">
+                                    <AccordionPanel>
+                                        <Text fontSize="lg" fontWeight = "semibold" key={ul.id}>{ul.lodging.name}</Text> 
+                                        <Image className="place-image" src={ul.lodging.image} alt="User Lodging" />
+                                    </AccordionPanel>
+                                    </div>
+                                : null}
+                            </div>
+                            )
+                        })
+                        : null}
+                        {userData ? 
+                            user_trails.map(ut => {
+                                return (
+                                <div >
+                                    {ut["favorite?"]===true  ?
+                                    <div className="user-card">
+                                        <AccordionPanel>
+                                            {/* <Divider /> */}
+                                            <Text fontSize="lg" fontWeight = "semibold" key={ut.id}>{ut.trail.name}</Text> 
+                                            <Image className="place-image" src={ut.trail.pictures[0]} alt="User User Trail" />
+                                        </AccordionPanel>
+                                        </div>
+                                    : null}
+                                </div>
+                                )
+                            })
+                        : null}
+                    </Flex>
+                </AccordionItem>
+            </Accordion>
 
             {/* accordion for user_trails */}
-            <Accordion  allowMultiple>
+            <Accordion allowMultiple mt="50px">
                 <AccordionItem>
                     <AccordionButton>
                         <Flex w="100%">
@@ -72,22 +141,23 @@ function UserPage(){
                         
                         <AccordionIcon />
                     </AccordionButton>
-                
-                {userData ? 
-                    user_trails.map(ut => {
-                        return (
-                        <>
-                            {ut["review"] ?
-                                <AccordionPanel>
-                                    <Divider />
-                                    <Text fontSize="lg" fontWeight = "semibold" key={ut.id}>{ut.trail.name}</Text> 
-                                    <Text >{ut["review"]}</Text>
-                                </AccordionPanel>
-                            : null}
-                        </>
-                        )
-                    })
-                : null}
+                    <Flex>
+                        {userData ? 
+                            user_trails.map(ut => {
+                                return (
+                                <>
+                                    {ut["review"] ?
+                                        <AccordionPanel>
+                                            <Text fontSize="lg" fontWeight = "semibold" key={ut.id}>{ut.trail.name}</Text> 
+                                            <Text >{ut["review"]}</Text>
+                                            <Image className="place-image" src={ut.trail.pictures[0]} alt="User Trail"/>
+                                        </AccordionPanel>
+                                    : null}
+                                </>
+                                )
+                            })
+                        : null}
+                    </Flex>
                 </AccordionItem>
             </Accordion>
 
@@ -104,21 +174,23 @@ function UserPage(){
                             <AccordionIcon />
                         </AccordionButton>
                     </h2>
-                
-                {userData ? 
-                    user_lodgings.map(ul => {
-                        return (
-                        <>
-                            {ul["review"] ?
-                                <AccordionPanel>
-                                    <Text fontSize="lg" fontWeight = "semibold" key={ul.id}>{ul.lodging.name}</Text> 
-                                    <Text >{ul["review"]}</Text>
-                                </AccordionPanel>
-                            : null}
-                        </>
-                        )
-                    })
-                : null}
+                <Flex> 
+                    {userData ? 
+                        user_lodgings.map(ul => {
+                            return (
+                            <>
+                                {ul["review"] ?
+                                    <AccordionPanel>
+                                        <Text fontSize="lg" fontWeight = "semibold" key={ul.id}>{ul.lodging.name}</Text> 
+                                        <Text >{ul["review"]}</Text>
+                                        <Image className="place-image" src={ul.lodging.image} alt="User Lodging"/>
+                                    </AccordionPanel>
+                                : null}
+                            </>
+                            )
+                        })
+                    : null}
+                </Flex>
                 </AccordionItem>
             </Accordion>
 
@@ -142,35 +214,7 @@ function UserPage(){
                                 <AccordionPanel>
                                     <Text fontSize="lg" fontWeight = "semibold" key={uf.id}>{uf.food.name}</Text> 
                                     <Text >{uf["review"]}</Text>
-                                </AccordionPanel>
-                            : null}
-                        </>
-                        )
-                    })
-                : null}
-                {userData ? 
-                    user_lodgings.map(ul => {
-                        return (
-                        <>
-                            {ul["review"] ?
-                                <AccordionPanel>
-                                    <Text fontSize="lg" fontWeight = "semibold" key={ul.id}>{ul.lodging.name}</Text> 
-                                    <Text >{ul["review"]}</Text>
-                                </AccordionPanel>
-                            : null}
-                        </>
-                        )
-                    })
-                : null}
-                {userData ? 
-                    user_trails.map(ut => {
-                        return (
-                        <>
-                            {ut["review"] ?
-                                <AccordionPanel>
-                                    <Divider />
-                                    <Text fontSize="lg" fontWeight = "semibold" key={ut.id}>{ut.trail.name}</Text> 
-                                    <Text >{ut["review"]}</Text>
+                                    <Image className="place-image" src={uf.food.pictures[0]} alt="User Food"/>
                                 </AccordionPanel>
                             : null}
                         </>
@@ -179,39 +223,7 @@ function UserPage(){
                 : null}
                 </AccordionItem>
             </Accordion>
-
-            {/* accordion for all favorites */}
-            <Accordion defaultIndex={[0]} allowMultiple>
-                <AccordionItem>
-                        <AccordionButton>
-                            <Flex w="100%">
-                                <Heading textAlign="left" size="md" w="60%">Favorites</Heading>
-                                <Text w = "40%">Click to see your favorites!</Text>
-                            </Flex>
-                            
-                            <AccordionIcon />
-                        </AccordionButton>
-                    
-                    {userData ? 
-                        user_foods.map(uf => {
-                            return (
-                            <>
-                                {uf["favorite?"]===true ? 
-                                    <AccordionPanel>
-                                        <Text fontSize="lg" fontWeight = "semibold" key={uf.id}>{uf.food.name}</Text> 
-                                        {/* <Text >{uf["review"]}</Text> */}
-                                    </AccordionPanel>
-                                : null}
-                            </>
-                            )
-                        })
-                    : null}
-                </AccordionItem>
-            </Accordion>
-
-
         </Box>
-            
         </>
     )
 }

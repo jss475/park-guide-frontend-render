@@ -1,10 +1,11 @@
-import {Image, Box, Divider} from '@chakra-ui/react'
+import {Image, Box, Text, Flex, Icon} from '@chakra-ui/react'
 import {useHistory, useLocation} from 'react-router-dom'
+import {BiUpvote, BiDownvote} from 'react-icons/bi'
 
 function FoodCard({food}){
 
     //refactor the food instance
-    const {id, name, pictures} = food
+    const {id, name, pictures, upvote, downvote} = food
 
     //create history to push
     const history = useHistory()
@@ -23,8 +24,8 @@ function FoodCard({food}){
 
     return (
         <>
-        <Box w="28%" borderWidth='1px' borderRadius='lg' overflow='hidden' m='5' onClick={handleFoodCardClick}>
-          <Image src={pictures[0]} alt="Picture of food" w="100%" height="150px" pl="10px" pr="10px" pt="10px" borderRadius="20px"/>
+        <Box w="calc(100% * (1/4) - 25px - 20px)" height="285px" borderWidth='1px' borderRadius='lg' overflow='hidden' m='5' onClick={handleFoodCardClick}>
+            <Image src={pictures[0]} alt="Picture of food" w="100%" h="60%" pl="10px" pr="10px" pt="10px" borderRadius="20px"/>
             <Box p='6'>
                 {/* difficult + route_type + estimate_time */}
                 <Box display='flex' alignItems='baseline'>
@@ -45,10 +46,29 @@ function FoodCard({food}){
                     fontWeight='semibold'
                     as='h4'
                     lineHeight='tight'
-                    noOfLines={5}
+                    noOfLines={2}
                     >
                     {name}
                 </Box>
+                <Flex 
+                    flexWrap="inline"
+                    color='gray.500'
+                    fontWeight='semibold'
+                    letterSpacing='wide'
+                    fontSize='sm'
+                    textTransform='uppercase'
+                    ml='0'
+                >
+                    <Flex>
+                        <Icon as={BiUpvote} mt="4px"/>
+                        <Text>{upvote}</Text>
+                    </Flex>
+                    <Flex>
+                        <Icon as={BiDownvote} ml = "15px" mt="4px"/>
+                        <Text >{downvote}</Text>
+                    </Flex>
+                    
+                </Flex>
 
             </Box>
         </Box>

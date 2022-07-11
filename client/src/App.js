@@ -15,6 +15,8 @@ import LodgingContainer from './components/LodgingContainer';
 import LodgingPage from './components/LodgingPage'
 import NewLodgingForm from './components/NewLodgingForm';
 import UserPage from './components/UserPage';
+import About from './components/About';
+import Yosemite from './components/Yosemite'
 
 function App() {
 
@@ -41,10 +43,10 @@ function App() {
       <NavBar isLoggedIn={isLoggedIn} handleLSLoggedIn={handleLSLoggedIn}/>
       <Switch>
         <Route exact path = "/about">
-          About
+          <About />
         </Route>
         <Route exact path = "/yosemite">
-          Yosemite
+          <Yosemite />
         </Route>
         <Route exact path = "/yosemite/lodging">
           <LodgingContainer />

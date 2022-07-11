@@ -21,9 +21,22 @@ function FoodContainer(){
         groceries = allFoods.filter(food => food.food_type === "Grocery")
     }
 
+    //create filter based off of upvote
+    if(restaurants.length > 0){
+        restaurants.sort(function(a,b) {
+            return parseInt(b.upvote) - parseInt(a.upvote)
+        })
+    }
+
+    if(groceries.length > 0){
+        groceries.sort(function(a,b) {
+            return parseInt(b.upvote) - parseInt(a.upvote)
+        })
+    }
+
     return (
         <>
-            <Heading mt="80px" ml="25px">Restaurants at Yosemite!</Heading>
+            <Heading mt="40px" ml="25px">Restaurants at Yosemite!</Heading>
             <Flex flexWrap="wrap" justifyContent="left" >
                 {restaurants.map(food=> {
                     return <FoodCard key={food.id} food={food} />

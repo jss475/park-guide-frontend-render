@@ -1,6 +1,8 @@
 class TrailsController < ApplicationController
 
     wrap_parameters format: []
+    before_action :authorize, only: [:create, :update, :destroy]
+
     def index
         render json: Trail.all, status: :ok
     end
@@ -34,6 +36,14 @@ class TrailsController < ApplicationController
 
     def trail_find
         Trail.find(params[:id])
+    end
+
+    def current_user
+        user = User.find_by(id: session[:user_id])
+    end
+
+    def authorize
+        render json: { error: "You must be logged in" } unless current_user 
     end
 
     # , :user_trails => [:review, :user => [:id, :password_digest, :name, :elite, :email, :password_confirmation]]

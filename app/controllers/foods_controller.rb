@@ -1,5 +1,8 @@
 class FoodsController < ApplicationController
 
+    wrap_parameters format: []
+    before_action :authorize, only: [:create, :update, :destroy]
+
     def index
         render json: Food.all, status: :ok
     end
@@ -33,5 +36,13 @@ class FoodsController < ApplicationController
 
     def find_food
         Food.find(params[:id])
+    end
+
+    def current_user
+        user = User.find_by(id: session[:user_id])
+    end
+
+    def authorize
+        render json: { error: "You must be logged in" } unless current_user 
     end
 end

@@ -1,5 +1,7 @@
 class UserFoodsController < ApplicationController
 
+    before_action :authorize, only:[:special_create, :upvote, :destroy, :downvote]
+    
     def index
         render json: UserFood.all, status: :ok
     end

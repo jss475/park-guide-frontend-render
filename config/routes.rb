@@ -14,6 +14,8 @@ Rails.application.routes.draw do
   delete '/logout', to: "sessions#logout"
   patch "/trails/:id", to: "trails#update"
   post "/user_trails", to: "user_trails#special_create"
+  post "/user_trails/upvote", to: "user_trails#upvote"
+  post "/user_trails/downvote", to: "user_trails#downvote"
   post "/user_foods", to: "user_foods#special_create"
   post "/user_foods/upvote", to: "user_foods#upvote"
   post "/user_foods/downvote", to: "user_foods#downvote"

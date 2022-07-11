@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Flex } from '@chakra-ui/react'
+import { Flex, Heading} from '@chakra-ui/react'
 import TrailsCard from "./TrailsCard"
 
 function TrailsContainer() {
@@ -22,11 +22,12 @@ function TrailsContainer() {
     }
     return(
         <>
-        <Flex flexWrap="wrap" justifyContent="left" mt="80px">
-            {allTrails.map(trail => {
-                return <TrailsCard key={trail.id} trail={trail}/>
-            })}
-        </Flex>
+            <Heading mt="40px" ml="25px">Trails at Yosemite!</Heading>
+            <Flex flexWrap="wrap" justifyContent="left" >
+                {allTrails.map(trail => {
+                    return <TrailsCard key={trail.id} trail={trail}/>
+                })}
+            </Flex>
         </>
     )
 }

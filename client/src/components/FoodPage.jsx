@@ -1,9 +1,10 @@
 import {useState, useEffect} from 'react'
 import {useParams} from 'react-router-dom'
-import {Heading, Box, Image, Text, Flex, Spacer, Link, Divider, Avatar, FormControl, FormLabel, Textarea, Button, TableContainer, Table, Tbody, Td, Tr, Icon} from '@chakra-ui/react'
+import {Heading, Box, Image, Text, Flex, Spacer, Link, Divider, Avatar, FormControl, FormLabel, Textarea, Button, Icon} from '@chakra-ui/react'
 import {FiExternalLink} from 'react-icons/fi'
 import {BiUpvote, BiDownvote} from 'react-icons/bi'
 import {FaStar, FaRegStar} from 'react-icons/fa'
+import {GoogleMap, useLoadScript, Marker} from "@react-google-maps/api"
 
 function FoodPage({isLoggedIn}){
     
@@ -35,6 +36,129 @@ function FoodPage({isLoggedIn}){
             };
             getFood();
     },[id])
+
+    ///////////////////////////////////  CREATING MAPS     /////////////////////////////////////////////////////////////
+    //hide the API key for google maps
+    const {isLoaded} = useLoadScript({googleMapsApiKey: process.env.REACT_APP_NEXT_PUBLIC_GOOGLE_MAPS_API_KEY})
+    
+    //create state to take in the lat and long of the address
+    const [latlong, setLatlong] = useState({lat: "", lng: ""})
+
+    //geocoder API call
+    useEffect(() => {
+        const data = async () => {
+            let req = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?new_forward_geocoder=true&address=${address}&key=${process.env.REACT_APP_NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`);
+
+            if (req.ok){
+                let res = await req.json()
+                setLatlong(res.results[0].geometry.location)
+            }
+        } 
+
+       data()
+    },[foodData])
+
+    //creating the google map
+    let map
+    if(!isLoaded){
+        map = <div>Loading...</div>
+    }else if(isLoaded && latlong.lat && latlong.lng){
+        map = <GoogleMap zoom={13} center={{lat: latlong.lat, lng: latlong.lng}} mapContainerClassName="map-container">
+
+            <Marker position={{lat: latlong.lat, lng: latlong.lng}} label="SL"  />
+        </GoogleMap>
+    }
+    
+
+    ////////////////////////////////////////////////////////////////////////////////////
+
+
+    ///////////////////////  WEATHER API ////////////////////////////
+
+    const [weatherData, setWeatherData] = useState([])
+    useEffect(() => {
+        const getWeatherData = async() => {
+            let req = await fetch(`https://api.weather.gov/points/${latlong.lat},${latlong.lng}`);
+
+            if(req.ok){
+                let res = await req.json()
+
+                fetch(res.properties.forecast)
+                    .then(res => res.json())
+                    .then(data => 
+                        setWeatherData(data.properties.periods)
+
+                    )
+            }
+
+        }
+        getWeatherData()
+        
+    },[latlong])
+
+    //weather JSX data
+    let weather = []
+    const current_date= new Date()
+    const current_hour = current_date.getHours()
+
+
+    if(weatherData.length > 0){
+        //get every other weather data
+        let output = [...weatherData].map((n,index) => index % 2 === 0 ? n : null)
+        let temp_low = [...weatherData].map((n,index) => index % 2 !== 0 ? n : null)
+        let filtered_output = output.filter(el => el !== null)
+        let temp_low_filtered = temp_low.filter(el => el !== null)
+        //pop the last two for a five day forecase
+        filtered_output.pop()
+        filtered_output.pop()
+        temp_low_filtered.pop()
+        temp_low_filtered.pop()
+
+        
+        if(filtered_output && temp_low_filtered){
+            //if it's night time do temp_low_filtered first
+            if((current_hour >= 18 && current_hour <= 24) || (current_hour >=0 && current_hour <= 6)){
+                //map the JSX data
+                temp_low_filtered.pop()
+                temp_low_filtered.unshift(filtered_output[0])
+                weather = temp_low_filtered.map((day,index) => {
+                    return(
+                        <>
+                            <Box borderWidth="1px" padding="5px" borderColor="grey" className="weather-box">
+                                <Text textAlign="center">{day.name}</Text>
+                                <Image src = {day.icon} w="120px" borderRadius="10px"/>
+                                <Flex flexWrap="inline">
+                                    <Text color="grey">{day.temperature} F</Text>
+                                    <Spacer />
+                                    <Text color="grey">{filtered_output[index].temperature} F</Text>
+                                </Flex>
+                            </Box>
+                        </>
+                    )
+                })
+            }else{
+                //map the JSX data
+                weather = filtered_output.map((day,index) => {
+                    return(
+                        <>
+                            <Box borderWidth="1px" padding="5px" borderColor="grey" className="weather-box">
+                                <Text textAlign="center">{day.name}</Text>
+                                <Image src = {day.icon} w="120px" borderRadius="10px"/>
+                                <Flex flexWrap="inline">
+                                    <Text color="grey">{day.temperature} F</Text>
+                                    <Spacer />
+                                    <Text color="grey">{temp_low_filtered[index].temperature} F</Text>
+                                </Flex>
+                            </Box>
+                        </>
+                    )
+                })
+            }
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////
+
 
     //on click for the upvote
     function handleUpvoteClick(){
@@ -174,7 +298,9 @@ function FoodPage({isLoggedIn}){
                 let filter_id = data.id
                 let filteredIndex
                 let filtered_data = foodData.user_foods.filter((uf,index)=> {
-                    filteredIndex = index
+                    if(uf.id === filter_id){
+                        filteredIndex = index
+                    }
                     return uf.id === filter_id
                 })
 
@@ -235,7 +361,7 @@ function FoodPage({isLoggedIn}){
             return (
                 <div key={uf.id}>
                     <Divider mt="15px"/>
-                    <Box mt="25px" ml="25px" mb="25px">
+                    <Box mt="25px"  mb="25px">
                         <Flex flexWrap="inline">
                             <Avatar name={uf.user.name} src='https://bit.ly/broken-link' />
                             <Text mt="1%" ml="10px">{uf.user.name}</Text>
@@ -253,16 +379,19 @@ function FoodPage({isLoggedIn}){
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     return (
         <>
-            <Box mt="80px" ml = "25px" w="80%">
-                <Flex>
+            <Flex flexWrap="inline" justifyContent="center" mt="15px">
+                    {weather}
+            </Flex>
+            <Box mt="40px" ml = "25px" w="85%">
+                <Flex flexWrap="inline" w="100%" justifyContent="right">
                     <Heading w="80%">{name}</Heading>
                     <Flex w="20%" justifyContent="right">
                         <Flex flexWrap="inline" mt="auto" mb="auto">
-                            <Icon as={BiUpvote} mr="10px" onClick={handleUpvoteClick}/> 
+                            <Icon as={BiUpvote} mr="10px" mt = "5px" onClick={handleUpvoteClick}/> 
                             <Text>{upvote}</Text>
                         </Flex>
                         <Flex flexWrap="inline" mt="auto" mb="auto" ml="20px">
-                            <Icon as={BiDownvote} mr="10px" onClick={handleDownvoteClick}/> 
+                            <Icon as={BiDownvote} mr="10px" mt = "5px" onClick={handleDownvoteClick}/> 
                             <Text>{downvote}</Text>
                         </Flex>
                         <Flex mt="auto" mb="auto" ml="20px" onClick={handleFavClick}>
@@ -270,13 +399,19 @@ function FoodPage({isLoggedIn}){
                         </Flex>
                     </Flex>
                 </Flex>
-                <Image src={pictures[0]} w="100%" borderRadius="20px" maxW="1366px"/>
+                <Flex wrap="inline">
+                    <Image src={pictures[0]} w="60%" borderRadius="20px" maxW="800px" mt="15px"/>
+                    <Box w="40%" p="20px" mt="auto" mb="auto">
+                        {map}
+                    </Box>
+                </Flex>
                 <Box
                         color='gray.500'
                         fontWeight='semibold'
                         letterSpacing='wide'
                         fontSize='sm'
                         ml='0'
+                        mt="5px"
                     >
                         <Flex flexWrap="inline"> 
                             <Text>{address}</Text>
@@ -294,27 +429,28 @@ function FoodPage({isLoggedIn}){
                     <p style={{"whiteSpace": "pre-line"}}>{description}</p>
                 </Box>
                 
+            
+
+                {/* If logged in you can leave a review */}
+                {isLoggedIn ? 
+                    <>
+                        <form onSubmit={handleAddReview} >
+                            <Box w="80%" ml="auto" mr="auto" mt="50px">
+                                <FormControl isRequired  >
+                                    <FormLabel>Add a Review!</FormLabel>
+                                    <Textarea onChange={handleReviewChange}></Textarea>            
+                                </FormControl>
+                                <Button type="submit" float="right" mt="10px"  mb="50px">Submit</Button>
+                            </Box>
+                        </form>
+                    </>
+            
+                : null}
+
+                {/* Add reviews */}
+                <Text fontSize='2xl' fontWeight="semibold"  mt="50px">User Reviews</Text>
+                {reviews}
             </Box>
-
-            {/* If logged in you can leave a review */}
-            {isLoggedIn ? 
-                <>
-                    <form onSubmit={handleAddReview} >
-                        <Box w="80%" ml="auto" mr="auto" mt="50px">
-                            <FormControl isRequired  >
-                                <FormLabel>Add a Review!</FormLabel>
-                                <Textarea onChange={handleReviewChange}></Textarea>            
-                            </FormControl>
-                            <Button type="submit" float="right" mt="10px"  mb="50px">Submit</Button>
-                        </Box>
-                    </form>
-                </>
-        
-            : null}
-
-            {/* Add reviews */}
-            <Text fontSize='2xl' fontWeight="semibold" ml="25px" mt="50px">User Reviews</Text>
-            {reviews}
         </>
     )
 }

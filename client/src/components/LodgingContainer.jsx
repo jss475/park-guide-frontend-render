@@ -20,9 +20,17 @@ function LodgingContainer(){
         getLodging();
     },[])
     console.log(allLodging)
+
+    //create filter based off of upvote
+    if(allLodging.length > 0){
+        allLodging.sort(function(a,b) {
+            return parseInt(b.upvote) - parseInt(a.upvote)
+        })
+    }
+
     return(
         <>
-            <Heading mt="80px" ml="25px">Lodging at Yosemite!</Heading>
+            <Heading mt="40px" ml="25px">Lodging at Yosemite!</Heading>
             <Flex flexWrap="wrap" justifyContent="left" >
                 {allLodging.map(lodging => {
                 return <LodgingCard key={lodging.id} lodging={lodging} />

@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import {useHistory} from 'react-router-dom'
-import {Input, Button, Select, FormControl, FormLabel, Box, Textarea, Text, FormErrorMessage, FormHelperText} from '@chakra-ui/react'
+import {Input, Button, Heading, Select, FormControl, FormLabel, Box, Textarea, Text, FormErrorMessage, FormHelperText} from '@chakra-ui/react'
 
 function NewFoodForm({isLoggedIn}){
     //set error for filling out the new food form
@@ -50,7 +50,8 @@ function NewFoodForm({isLoggedIn}){
     }
 
     return (
-        <Box mt="80px" w="80%" ml="auto" mr="auto">  
+        <Box mt="60px" w="80%" ml="auto" mr="auto">  
+            <Heading mb="15px">Please Add a Restaurant/Grocery!</Heading>
             {errors.map(error => <Text color="red">{error}</Text>)}
             <form id="new-food-form" onSubmit={handleNewFoodSubmit}>
                 <FormControl isRequired>

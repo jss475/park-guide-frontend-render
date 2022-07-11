@@ -18,6 +18,7 @@ import { Text, Image, Table,
     Divider,
     Box,
     Avatar,
+    Spacer,
     FormControl, FormLabel, Textarea, Button, Heading
 } from "@chakra-ui/react"
 import {GiHamburger, GiWaterDrop} from 'react-icons/gi'
@@ -26,6 +27,7 @@ import {GoogleMap, useLoadScript, Marker} from "@react-google-maps/api"
 import '../trailpage.css'
 import {FaStar, FaRegStar} from 'react-icons/fa'
 
+//fix upvote and downvote backend
 
 function TrailPage({isLoggedIn}){
     //get pathname to retrieve the ID of the trail that was clicked
@@ -86,6 +88,95 @@ function TrailPage({isLoggedIn}){
             <Marker position={{lat: starting_lat, lng: starting_long}} label="SL"  />
         </GoogleMap>
     }
+
+    ///////////////////////  WEATHER API ////////////////////////////
+
+    const [weatherData, setWeatherData] = useState([])
+    useEffect(() => {
+        const getWeatherData = async() => {
+            let req = await fetch(`https://api.weather.gov/points/${starting_lat},${starting_long}`);
+
+            if(req.ok){
+                let res = await req.json()
+
+                fetch(res.properties.forecast)
+                    .then(res => res.json())
+                    .then(data => 
+                        setWeatherData(data.properties.periods)
+
+                    )
+            }
+
+        }
+        getWeatherData()
+        
+    },[starting_lat])
+
+    //weather JSX data
+    let weather = []
+    const current_date= new Date()
+    const current_hour = current_date.getHours()
+
+
+    if(weatherData.length > 0){
+        //get every other weather data
+        let output = [...weatherData].map((n,index) => index % 2 === 0 ? n : null)
+        let temp_low = [...weatherData].map((n,index) => index % 2 !== 0 ? n : null)
+        let filtered_output = output.filter(el => el !== null)
+        let temp_low_filtered = temp_low.filter(el => el !== null)
+        //pop the last two for a five day forecase
+        filtered_output.pop()
+        filtered_output.pop()
+        temp_low_filtered.pop()
+        temp_low_filtered.pop()
+
+        
+        if(filtered_output && temp_low_filtered){
+            //if it's night time do temp_low_filtered first
+            if((current_hour >= 18 && current_hour <= 24) || (current_hour >=0 && current_hour <= 6)){
+                //map the JSX data
+                temp_low_filtered.pop()
+                temp_low_filtered.unshift(filtered_output[0])
+                weather = temp_low_filtered.map((day,index) => {
+                    return(
+                        <>
+                            <Box borderWidth="1px" padding="5px" borderColor="grey" className="weather-box">
+                                <Text textAlign="center">{day.name}</Text>
+                                <Image src = {day.icon} w="120px" borderRadius="10px"/>
+                                <Flex flexWrap="inline">
+                                    <Text color="grey">{day.temperature} F</Text>
+                                    <Spacer />
+                                    <Text color="grey">{filtered_output[index].temperature} F</Text>
+                                </Flex>
+                            </Box>
+                        </>
+                    )
+                })
+            }else{
+                //map the JSX data
+                weather = filtered_output.map((day,index) => {
+                    return(
+                        <>
+                            <Box borderWidth="1px" padding="5px" borderColor="grey" className="weather-box">
+                                <Text textAlign="center">{day.name}</Text>
+                                <Image src = {day.icon} w="120px" borderRadius="10px"/>
+                                <Flex flexWrap="inline">
+                                    <Text color="grey">{day.temperature} F</Text>
+                                    <Spacer />
+                                    <Text color="grey">{temp_low_filtered[index].temperature} F</Text>
+                                </Flex>
+                            </Box>
+                        </>
+                    )
+                })
+            }
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////
+
+
+
 
     //create burger icons for number of foods
     let burgerIcon = []
@@ -190,7 +281,9 @@ function TrailPage({isLoggedIn}){
                 //see if this user trail table/data exists already
                 let filteredIndex
                 let filtered_data = trailData.user_trails.filter((ut,index) => {
-                    filteredIndex = index
+                    if(ut.id === filter_id){
+                        filteredIndex = index
+                    }
                     return ut.id === filter_id})
                 //if it exists, replace the old isntance and replace with the new instance
                 if(filtered_data.length > 0) {
@@ -210,7 +303,10 @@ function TrailPage({isLoggedIn}){
 
     //handle clicking the favorite button
     function handleFavClick(){
-        setFavClicked(prev => !prev)
+        if(isLoggedIn){
+            setFavClicked(prev => !prev)
+        }
+        
 
         const user_id = localStorage.getItem("id")
 
@@ -280,8 +376,7 @@ function TrailPage({isLoggedIn}){
         }
 
     }
-        console.log(favClicked)
-        console.log(user_trails)
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////
    
     //map out the reviews with the user name
@@ -310,17 +405,20 @@ function TrailPage({isLoggedIn}){
      
     return (
         <>
-        <Box ml = "25px" w="80%" className="trail-page-container">
+        <Flex flexWrap="inline" justifyContent="center" mt="15px">
+                {weather}
+        </Flex>
+        <Box ml = "25px" w="100%" className="trail-page-container">
             {/* Title and upvote and downvote */}
-            <Flex w= "80%">
+            <Flex w= "100%" justifyContent="right">
                 <Heading w="80%" fontSize='3xl'>{name}</Heading>
-                <Flex w="20%" justifyContent="right">
+                <Flex w="20%" >
                     <Flex flexWrap="inline" mt="auto" mb="auto">
-                        <Icon as={BiUpvote} mr="10px" onClick={handleUpvoteClick}/> 
+                        <Icon as={BiUpvote} mr="10px" mt = "5px" onClick={handleUpvoteClick}/> 
                         <Text>{upvote}</Text>
                     </Flex>
                     <Flex flexWrap="inline" mt="auto" mb="auto" ml="20px">
-                        <Icon as={BiDownvote} mr="10px" onClick={handleDownvoteClick}/> 
+                        <Icon as={BiDownvote} mr="10px" mt = "5px" onClick={handleDownvoteClick}/> 
                         <Text>{downvote}</Text>
                     </Flex>
                     <Flex mt="auto" mb="auto" ml="20px" onClick={handleFavClick}>
@@ -330,18 +428,17 @@ function TrailPage({isLoggedIn}){
             </Flex>
             
             {/* Image and Map container */}
-            <Flex flexWrap="inline" w="100%" justifyContent="center">
+            <Flex flexWrap="inline" w="100%" justifyContent="center" mt="15px">
                 <Image className="trail-page-img" src={pictures[0]} w="50%" alt="trail page image" m="5px" borderRadius="5"/>
-                <Box w="50%">
+                <Box w="50%" mt="auto" mb="auto" p="20px">
                     {map}
                 </Box>
                 
             </Flex>
             {/* {map} */}
-            <Flex flexWrap="inline" w="100%" justifyContent="center">
+            <Box  w="80%" ml="calc(10% - 25px)">
                 {/* Add 1st table */}
-                <Flex w="80%">
-                    <TableContainer w="100%" ml="5px" border="2px ridge" mt="10px" borderRadius="5px">
+                    <TableContainer  border="2px ridge" mt="10px" borderRadius="5px">
                         <Table variant='simple'  >
                             <Thead>
                             <Tr>
@@ -361,11 +458,11 @@ function TrailPage({isLoggedIn}){
                             </Tbody>
                         </Table>
                     </TableContainer>
-                </Flex>
-            </Flex>
-            <Flex flexWrap="inline" w="100%" justifyContent="center">
+
+            </Box>
+            <Flex flexWrap="inline" w="100%" ml="calc(10% - 25px)">
                 <Flex w="80%">
-                    <TableContainer w="70%" ml="15px">
+                    <TableContainer w="70%" >
                         <Table variant="simple">
                             <Thead>
                                 <Tr>
@@ -382,23 +479,25 @@ function TrailPage({isLoggedIn}){
                         </Table>
                     </TableContainer>
                     {/* creating stats table for the elevation */}
-                    <StatGroup w="30%" ml = "10px"  mt="10px">
-                        <Stat>
-                            <StatLabel>Starting Elevation</StatLabel>
-                            <StatNumber>{starting_elevation} ft</StatNumber>
-                            <StatHelpText>
-                            <StatArrow type={elevation_gain >=0 ?'increase' : 'decrease'} />
-                            {elevation_gain} ft of elevation gain
-                            </StatHelpText>
-                        </Stat>
-                    </StatGroup>
+                    <Flex textAlign = "right" w="30%">
+                        <StatGroup w="100%"  mt="10px">
+                            <Stat>
+                                <StatLabel>Starting Elevation</StatLabel>
+                                <StatNumber>{starting_elevation} ft</StatNumber>
+                                <StatHelpText>
+                                <StatArrow type={elevation_gain >=0 ?'increase' : 'decrease'} />
+                                {elevation_gain} ft of elevation gain
+                                </StatHelpText>
+                            </Stat>
+                        </StatGroup>
+                    </Flex>
                 </Flex>
             </Flex>
             {/* If logged in you can leave a review */}
             {isLoggedIn ? 
                 <>
                     <form onSubmit={handleAddReview} >
-                        <Box w="80%" ml="auto" mr="auto" mt="50px">
+                        <Box w="80%" ml="calc(10% - 25px)" mt="50px">
                             <FormControl isRequired  >
                                 <FormLabel>Add a Review!</FormLabel>
                                 <Textarea onChange={handleReviewChange}></Textarea>            

@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {useHistory} from 'react-router-dom'
-import { Input, Button, FormControl, FormLabel, Box, Text, Heading} from '@chakra-ui/react'
+import { Input, Button, FormControl, FormLabel, FormHelperText, Box, Text, Heading} from '@chakra-ui/react'
 
 
 function SignUp({handleLSLoggedIn}){
@@ -46,15 +46,21 @@ function SignUp({handleLSLoggedIn}){
                 </FormControl>
                 <FormControl isRequired>
                     <FormLabel htmlFor="email">Email</FormLabel>
-                    <Input name="email" placeholder="Enter your email"/>
+                    <Input name="email" placeholder="Enter your Email"/>
                 </FormControl>
                 <FormControl isRequired>
                     <FormLabel>Password</FormLabel>
-                    <Input name = "password" type="password" placeholder="Enter your password"/>
+                    <Input name = "password" type="password" placeholder="Enter your Password"/>
+
                 </FormControl>
                 <FormControl isRequired>
                     <FormLabel>Password Confirmation</FormLabel>
-                    <Input name = "password_confirmation" type="password" placeholder="Confirm your password"/>
+                    <Input name = "password_confirmation" type="password" placeholder="Confirm your Password"/>
+                    <FormHelperText>Must be minimum 8 characters</FormHelperText>
+                    <FormHelperText>Must contain at least 1 uppercase</FormHelperText>
+                    <FormHelperText>Must contain at least 1 lowercase</FormHelperText>
+                    <FormHelperText>Must contain a special character</FormHelperText>
+                    <FormHelperText>Must contain at least 1 number</FormHelperText>
                 </FormControl>
                 <Button mt="15px" type="submit">Submit</Button>
             </form>

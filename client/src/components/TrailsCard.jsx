@@ -1,13 +1,14 @@
 
-import { Box, Image, Icon} from '@chakra-ui/react'
+import { Box, Image, Icon, Flex, Text} from '@chakra-ui/react'
 import {GiHamburger, GiWaterDrop} from 'react-icons/gi'
 import {useHistory, useLocation} from 'react-router-dom'
+import {BiUpvote, BiDownvote} from 'react-icons/bi'
 
 
 
 function TrailsCard({trail}) {
 
-    const {id, name, mileage, route_type, difficulty, estimated_time, water, food, pictures} = trail
+    const {id, name, mileage, route_type, difficulty, estimated_time, water, food, pictures, upvote, downvote} = trail
 
 
     //create burger icons for number of foods
@@ -38,9 +39,7 @@ function TrailsCard({trail}) {
     }
 
       return (
-
-        
-        <Box w="28%" borderWidth='1px' borderRadius='lg' overflow='hidden' m='5' onClick={handleTrailCardClick}>
+        <Box w="calc(100% * (1/4) - 25px - 20px)" borderWidth='1px' borderRadius='lg' overflow='hidden' m='5' onClick={handleTrailCardClick}>
           <Image src={pictures[0]} alt="Picture of trail" w="100%" pl="10px" pr="10px" pt="10px" borderRadius="20px"/>
             <Box p='6'>
                 {/* difficult + route_type + estimate_time */}
@@ -73,6 +72,25 @@ function TrailsCard({trail}) {
                     >
                     {burgerIcon} &bull; {waterIcon}
                 </Box>
+                <Flex 
+                    flexWrap="inline"
+                    color='gray.500'
+                    fontWeight='semibold'
+                    letterSpacing='wide'
+                    fontSize='sm'
+                    textTransform='uppercase'
+                    ml='0'
+                >
+                    <Flex>
+                        <Icon as={BiUpvote} mt="4px"/>
+                        <Text>{upvote}</Text>
+                    </Flex>
+                    <Flex>
+                        <Icon as={BiDownvote} ml = "15px" mt="4px"/>
+                        <Text >{downvote}</Text>
+                    </Flex>
+                    
+                </Flex>
 
                 {/*  */}
             </Box>

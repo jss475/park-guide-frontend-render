@@ -1,6 +1,8 @@
 class LodgingsController < ApplicationController
 
     wrap_parameters format: []
+    before_action :authorize, only: [:create, :update, :destroy]
+    
     def index
         render json: Lodging.all, status: :ok
     end
@@ -37,6 +39,14 @@ class LodgingsController < ApplicationController
 
     def lodging_find
         Lodging.find(params[:id])
+    end
+
+    def current_user
+        user = User.find_by(id: session[:user_id])
+    end
+
+    def authorize
+        render json: { error: "You must be logged in" } unless current_user 
     end
 
 end

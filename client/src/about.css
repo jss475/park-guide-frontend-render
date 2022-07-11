@@ -1,0 +1,96 @@
+.about-title-container{
+    width: 100%;
+    /* height: 100%; */
+    text-align: center;
+    background-image: url("yosemite4.jpg");
+    background-size: 100% 100%; 
+    background-repeat: no-repeat;
+    object-fit: cover;
+    padding-top: 100px;
+    padding-bottom: 350px;
+    background-color: #ddd9d9;
+    background-blend-mode: multiply;
+    color: rgb(255, 255, 255);
+}
+
+@keyframes fade-in{
+    0% {
+        opacity:1;
+    }
+    45% {
+      opacity:1;
+    }
+    55% {
+      opacity:0;
+    }
+    100% {
+      opacity:0;
+    }
+}
+
+.yosemite-img-1{
+    animation: fade-in;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-duration: 8s;
+    animation-direction: alternate;
+}
+
+.about-text{
+    font-family: 'Cantora One', sans-serif;
+    background-color: rgb(245, 184, 118);
+    padding: 50px;
+}
+
+.about-text2{
+    font-family: 'Cantora One', sans-serif;
+}
+
+.about-heading{
+    font-family: "Oswald", sans-serif
+    /* font-family: 'Lato', sans-serif; */
+}
+
+.about-title{
+    font-family: "Oswald", sans-serif
+}
+
+.shenandoah{
+    width: 25%;
+    margin-left: 25px;
+    margin-right: 25px;
+    height: 250px;
+    text-align: center;
+    background-image: url("shenandoah.jpg");
+    background-size: 100% 100%; 
+    background-repeat: no-repeat;
+    object-fit: cover;
+    color: rgb(255, 255, 255);
+}
+
+.wrapper .hide{
+    position: absolute;
+    visibility: hidden;
+    z-index: 1000;
+    color: white;
+    top: 90px;
+    left: 10px;
+    font-size: 20px;
+    font-family: 'Cantora One', sans-serif;
+
+}
+
+.wrapper:hover .hide{
+    visibility: visible;
+}
+
+.wrapper{
+    width: 25%;
+    margin-left: 25px;
+    margin-right: 25px;
+    position: relative
+}
+
+.hover{
+    border-radius: 10px
+}
