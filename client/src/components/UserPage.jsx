@@ -29,7 +29,6 @@ function UserPage(){
     },[])
 
     const {email, name, user_foods, user_lodgings, user_trails, created_at} = userData
-    console.log(userData)
 
     //calculate days you've been a member
     const current = new Date()
@@ -51,6 +50,16 @@ function UserPage(){
         let days = days_since_created%365
         timeMessage = `${years} year(s) and ${days} day(s)`
     }
+
+    //filter for just favorites
+    let user_foods_fav_filtered = [...user_foods].filter(uf => uf["favorite?"] === true)
+    let user_lodgings_fav_filtered = [...user_lodgings].filter(ul => ul["favorite?"] === true)
+    let user_trails_fav_filtered = [...user_trails].filter(ut => ut["favorite?"] === true)
+
+    //filter for those with reviews
+    let user_foods_review_filter = [...user_foods].filter(uf => uf["review"])
+    let user_lodgings_review_filter = [...user_lodgings].filter(ul => ul["review"])
+    let user_trails_review_filter = [...user_trails].filter(ut => ut["review"])
     ////////////////////////////////////////////////////////////////////////////////////////
 
     return (
@@ -74,59 +83,58 @@ function UserPage(){
                             
                             <AccordionIcon />
                         </AccordionButton>
-                    <Flex flexDirection="row" flexWrap="wrap">
+                    <Grid templateColumns="repeat(3, 250px)" gap={6}>
 
                         {userData ? 
-                            user_foods.map(uf => {
-                                console.log(uf)
+                            user_foods_fav_filtered.map(uf => {
                                 return (
                                     <div>
                                         {uf["favorite?"]===true ? 
-                                            <div className="user-card">
+                                            <GridItem className="user-card">
                                             <AccordionPanel>
-                                                <Text  fontSize="lg" fontWeight = "semibold" key={uf.id}>{uf.food.name}</Text> 
+                                                <Text  noOfLines={1} fontSize="lg" fontWeight = "semibold" key={uf.id}>{uf.food.name}</Text> 
                                                 <Image className="place-image" src={uf.food.pictures[0]} alt="User Food"/>
                                             </AccordionPanel>
-                                            </div>
+                                            </GridItem>
                                         : null}
                                     </div>
                                 )
                             })
                         : null}
                                         {userData ? 
-                        user_lodgings.map(ul => {
+                        user_lodgings_fav_filtered.map(ul => {
                             return (
                             <div >
                                 {ul["favorite?"]===true  ?
-                                <div className="user-card">
+                                <GridItem className="user-card">
                                     <AccordionPanel>
-                                        <Text fontSize="lg" fontWeight = "semibold" key={ul.id}>{ul.lodging.name}</Text> 
+                                        <Text noOfLines={1} fontSize="lg" fontWeight = "semibold" key={ul.id}>{ul.lodging.name}</Text> 
                                         <Image className="place-image" src={ul.lodging.image} alt="User Lodging" />
                                     </AccordionPanel>
-                                    </div>
+                                    </GridItem>
                                 : null}
                             </div>
                             )
                         })
                         : null}
                         {userData ? 
-                            user_trails.map(ut => {
+                            user_trails_fav_filtered.map(ut => {
                                 return (
                                 <div >
                                     {ut["favorite?"]===true  ?
-                                    <div className="user-card">
+                                    <GridItem className="user-card">
                                         <AccordionPanel>
                                             {/* <Divider /> */}
-                                            <Text fontSize="lg" fontWeight = "semibold" key={ut.id}>{ut.trail.name}</Text> 
+                                            <Text noOfLines={1} fontSize="lg" fontWeight = "semibold" key={ut.id}>{ut.trail.name}</Text> 
                                             <Image className="place-image" src={ut.trail.pictures[0]} alt="User User Trail" />
                                         </AccordionPanel>
-                                        </div>
+                                        </GridItem>
                                     : null}
                                 </div>
                                 )
                             })
                         : null}
-                    </Flex>
+                    </Grid>
                 </AccordionItem>
             </Accordion>
 
@@ -141,23 +149,25 @@ function UserPage(){
                         
                         <AccordionIcon />
                     </AccordionButton>
-                    <Flex>
+                    <Grid templateColumns="repeat(3, 250px)" gap={6}>
                         {userData ? 
-                            user_trails.map(ut => {
+                            user_trails_review_filter.map(ut => {
                                 return (
                                 <>
                                     {ut["review"] ?
+                                    <GridItem>
                                         <AccordionPanel>
                                             <Text fontSize="lg" fontWeight = "semibold" key={ut.id}>{ut.trail.name}</Text> 
                                             <Text >{ut["review"]}</Text>
                                             <Image className="place-image" src={ut.trail.pictures[0]} alt="User Trail"/>
                                         </AccordionPanel>
+                                        </GridItem>
                                     : null}
                                 </>
                                 )
                             })
                         : null}
-                    </Flex>
+                    </Grid>
                 </AccordionItem>
             </Accordion>
 
@@ -174,23 +184,25 @@ function UserPage(){
                             <AccordionIcon />
                         </AccordionButton>
                     </h2>
-                <Flex> 
+                <Grid templateColumns="repeat(3, 250px)" gap={6}> 
                     {userData ? 
-                        user_lodgings.map(ul => {
+                        user_lodgings_review_filter.map(ul => {
                             return (
                             <>
                                 {ul["review"] ?
+                                <GridItem>
                                     <AccordionPanel>
                                         <Text fontSize="lg" fontWeight = "semibold" key={ul.id}>{ul.lodging.name}</Text> 
                                         <Text >{ul["review"]}</Text>
                                         <Image className="place-image" src={ul.lodging.image} alt="User Lodging"/>
                                     </AccordionPanel>
+                                    </GridItem>
                                 : null}
                             </>
                             )
                         })
                     : null}
-                </Flex>
+                </Grid>
                 </AccordionItem>
             </Accordion>
 
@@ -205,22 +217,25 @@ function UserPage(){
                         
                         <AccordionIcon />
                     </AccordionButton>
-                
-                {userData ? 
-                    user_foods.map(uf => {
-                        return (
-                        <>
-                            {uf["review"] ? 
-                                <AccordionPanel>
-                                    <Text fontSize="lg" fontWeight = "semibold" key={uf.id}>{uf.food.name}</Text> 
-                                    <Text >{uf["review"]}</Text>
-                                    <Image className="place-image" src={uf.food.pictures[0]} alt="User Food"/>
-                                </AccordionPanel>
-                            : null}
-                        </>
-                        )
-                    })
-                : null}
+                <Grid templateColumns="repeat(3, 250px)" gap={6}>
+                    {userData ? 
+                        user_foods_review_filter.map(uf => {
+                            return (
+                            <>
+                                {uf["review"] ? 
+                                    <GridItem>
+                                        <AccordionPanel>
+                                            <Text fontSize="lg" fontWeight = "semibold" key={uf.id}>{uf.food.name}</Text> 
+                                            <Text >{uf["review"]}</Text>
+                                            <Image className="place-image" src={uf.food.pictures[0]} alt="User Food"/>
+                                        </AccordionPanel>
+                                    </GridItem>
+                                : null}
+                            </>
+                            )
+                        })
+                    : null}
+                </Grid>
                 </AccordionItem>
             </Accordion>
         </Box>
