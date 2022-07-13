@@ -24,8 +24,8 @@ function FoodCard({food}){
 
     return (
         <>
-        <Box w="calc(100% * (1/4) - 25px - 20px)" height="285px" borderWidth='1px' borderRadius='lg' overflow='hidden' m='5' onClick={handleFoodCardClick}>
-            <Image src={pictures[0]} alt="Picture of food" w="100%" h="60%" pl="10px" pr="10px" pt="10px" borderRadius="20px"/>
+        <Box w="calc(100% * (1/4) - 25px - 20px)" fontFamily="Lato" backgroundColor="white" borderColor="black" height="285px" borderWidth='1px' borderRadius='lg' overflow='hidden' m='5' onClick={handleFoodCardClick}>
+            <Image src={pictures[0]} alt="Picture of food" w="100%" h="60%" ml ="auto" mr="auto" pl="10px" pr="10px" pt="10px" borderRadius="20px"/>
             <Box p='6'>
                 {/* difficult + route_type + estimate_time */}
                 <Box display='flex' alignItems='baseline'>
@@ -47,6 +47,7 @@ function FoodCard({food}){
                     as='h4'
                     lineHeight='tight'
                     noOfLines={2}
+                    fontFamily="Raleway"
                     >
                     {name}
                 </Box>

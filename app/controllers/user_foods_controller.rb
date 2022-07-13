@@ -1,5 +1,6 @@
 class UserFoodsController < ApplicationController
 
+    wrap_parameters format: []
     before_action :authorize, only:[:special_create, :upvote, :destroy, :downvote]
     
     def index
@@ -45,14 +46,14 @@ class UserFoodsController < ApplicationController
                 uf_w_all.update(:upvote? => new_upvote_boolean)
                 #find the food instance
                 food = Food.find_by id: uf_params[:food_id]
-                new_upvote = food["upvote"] - 1
+                new_upvote = +food["upvote"] - 1
                 food.update(:upvote => new_upvote)
                 return render json: food, status: :created
             else uf_w_all.upvote? === false
                 new_upvote_boolean = true
                 uf_w_all.update(:upvote? => new_upvote_boolean)
                 food = Food.find_by id: uf_params[:food_id]
-                new_upvote = food["upvote"] + 1
+                new_upvote = +food["upvote"] + 1
                 food.update(:upvote => new_upvote)
                 return render json: food, status: :created
             end
@@ -60,7 +61,7 @@ class UserFoodsController < ApplicationController
             new_params = uf_params.merge(:upvote? => true)
             ul_instance = UserFood.create(new_params)
             food = Food.find_by id: uf_params[:food_id]
-            new_upvote = food["upvote"] + 1
+            new_upvote = +food["upvote"] + 1
             food.update(:upvote => new_upvote)
             return render json: food, status: :created
         end

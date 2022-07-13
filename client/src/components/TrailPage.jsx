@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import {useParams} from 'react-router-dom'
+import {useParams, useHistory} from 'react-router-dom'
 import { Text, Image, Table,
     Thead,
     Tbody,
@@ -34,6 +34,8 @@ function TrailPage({isLoggedIn}){
     const { id } = useParams()
     // let trailId = pathname[pathname.length-1]
 
+    //set usehistory to push
+    const history = useHistory()
     //review added state
     const [reviewAdded, setReviewAdded] = useState()
     //create state to take in trail data
@@ -76,7 +78,6 @@ function TrailPage({isLoggedIn}){
     //refactor the trail data
     const {name, proximity, mileage, elevation_gain, starting_elevation, starting_lat, starting_long, ending_lat, ending_long, route_type, difficulty, estimated_time, water, food, pictures, upvote, downvote, user_trails} = trailData
 
-
     //creating the google map
     let map
     if(!isLoaded){
@@ -95,22 +96,26 @@ function TrailPage({isLoggedIn}){
     useEffect(() => {
         const getWeatherData = async() => {
             let req = await fetch(`https://api.weather.gov/points/${starting_lat},${starting_long}`);
-
+            console.log(req)
             if(req.ok){
                 let res = await req.json()
-
-                fetch(res.properties.forecast)
-                    .then(res => res.json())
-                    .then(data => 
+                // console.log(res)
+                const get_forecast = async() => {
+                    let w_req = await fetch(res.properties.forecast)    
+                
+                    if(w_req.ok){
+                        let data = await w_req.json()
                         setWeatherData(data.properties.periods)
-
-                    )
+                    }
+                }
+                get_forecast()
             }
-
         }
-        getWeatherData()
-        
-    },[starting_lat])
+        if(starting_lat % 1 !==0){
+            getWeatherData()
+        }
+            
+    },[starting_lat, starting_long])
 
     //weather JSX data
     let weather = []
@@ -140,13 +145,13 @@ function TrailPage({isLoggedIn}){
                 weather = temp_low_filtered.map((day,index) => {
                     return(
                         <>
-                            <Box borderWidth="1px" padding="5px" borderColor="grey" className="weather-box">
-                                <Text textAlign="center">{day.name}</Text>
-                                <Image src = {day.icon} w="120px" borderRadius="10px"/>
+                            <Box borderWidth="1px" padding="5px" borderColor="grey" className="weather-box" backgroundColor="white">
+                                <Text textAlign="center" className="food-text">{day.name}</Text>
+                                <Image src = {day.icon} w="90px" borderRadius="10px" ml="auto" mr="auto"/>
                                 <Flex flexWrap="inline">
-                                    <Text color="grey">{day.temperature} F</Text>
+                                    <Text color="grey"  pr="5px">{day.temperature} F</Text>
                                     <Spacer />
-                                    <Text color="grey">{filtered_output[index].temperature} F</Text>
+                                    <Text color="grey"  pl="5px">{filtered_output[index].temperature} F</Text>
                                 </Flex>
                             </Box>
                         </>
@@ -157,13 +162,13 @@ function TrailPage({isLoggedIn}){
                 weather = filtered_output.map((day,index) => {
                     return(
                         <>
-                            <Box borderWidth="1px" padding="5px" borderColor="grey" className="weather-box">
-                                <Text textAlign="center">{day.name}</Text>
-                                <Image src = {day.icon} w="120px" borderRadius="10px"/>
+                            <Box borderWidth="1px" padding="5px" borderColor="grey" className="weather-box" backgroundColor="white">
+                                <Text textAlign="center" className="food-text">{day.name}</Text>
+                                <Image src = {day.icon} w="90px" borderRadius="10px" ml="auto" mr="auto"/>
                                 <Flex flexWrap="inline">
-                                    <Text color="grey">{day.temperature} F</Text>
+                                    <Text color="grey" className="food-text" pl="5px">{day.temperature} F</Text>
                                     <Spacer />
-                                    <Text color="grey">{temp_low_filtered[index].temperature} F</Text>
+                                    <Text color="grey" className="food-text" pr="5px">{temp_low_filtered[index].temperature} F</Text>
                                 </Flex>
                             </Box>
                         </>
@@ -192,6 +197,11 @@ function TrailPage({isLoggedIn}){
 
     //on click for the upvote
     function handleUpvoteClick(){
+        //if you aren't logged in you get pushed to login
+        if(!isLoggedIn){
+            history.push('/login')
+        }
+
         const user_id = localStorage.getItem("id")
         const configObj = {
             method: "POST",
@@ -220,6 +230,11 @@ function TrailPage({isLoggedIn}){
 
     //on click for the downvote
     function handleDownvoteClick(){
+        //if you aren't logged in you get pushed to login
+        if(!isLoggedIn){
+            history.push('/login')
+        }
+
         const user_id = localStorage.getItem("id")
         const configObj = {
             method: "POST",
@@ -303,6 +318,10 @@ function TrailPage({isLoggedIn}){
 
     //handle clicking the favorite button
     function handleFavClick(){
+        //if you aren't logged in you get pushed to login
+        if(!isLoggedIn){
+            history.push('/login')
+        }
         if(isLoggedIn){
             setFavClicked(prev => !prev)
         }
@@ -330,7 +349,9 @@ function TrailPage({isLoggedIn}){
                 let filter_id = data.id
                 let filteredIndex
                 let filtered_data = trailData.user_trails.filter((ut,index)=> {
-                    filteredIndex = index
+                    if(ut.id === filter_id){
+                        filteredIndex = index
+                    }
                     return ut.id === filter_id
                 })
 
@@ -382,12 +403,19 @@ function TrailPage({isLoggedIn}){
     //map out the reviews with the user name
     let reviews = []
     if(user_trails){
-        reviews = user_trails.map(ut => {
+        //sort the reviews so that newest comes up at the top
+        reviews = user_trails.sort(function(a,b) {
+            let a_date = new Date(a.updated_at)
+            let b_date = new Date(b.updated_at)
+            
+            return b_date - a_date
+        
+        }).map(ut => {
             if(ut["review"]){
                 return (
                     <>
                     <Divider mt="15px" key={ut.id}/>
-                        <Box mt="25px" ml="25px" mb="25px">
+                        <Box mt="25px" ml="25px" mb="25px" fontFamily="Lato">
                             <Flex flexWrap="inline">
                                 <Avatar name={ut.user.name} src='https://bit.ly/broken-link' />
                                 <Text mt="1%" ml="10px">{ut.user.name}</Text>
@@ -408,11 +436,11 @@ function TrailPage({isLoggedIn}){
         <Flex flexWrap="inline" justifyContent="center" mt="15px">
                 {weather}
         </Flex>
-        <Box ml = "25px" w="100%" className="trail-page-container">
+        <Box ml = "25px" w="85%" className="trail-page-container" fontFamily="Lato">
             {/* Title and upvote and downvote */}
             <Flex w= "100%" justifyContent="right">
-                <Heading w="80%" fontSize='3xl'>{name}</Heading>
-                <Flex w="20%" >
+                <Text className = "trail-page-heading" fontSize="4xl" w="80%">{name}</Text>
+                <Flex w="20%" justifyContent="right">
                     <Flex flexWrap="inline" mt="auto" mb="auto">
                         <Icon as={BiUpvote} mr="10px" mt = "5px" onClick={handleUpvoteClick}/> 
                         <Text>{upvote}</Text>
@@ -428,28 +456,28 @@ function TrailPage({isLoggedIn}){
             </Flex>
             
             {/* Image and Map container */}
-            <Flex flexWrap="inline" w="100%" justifyContent="center" mt="15px">
+            <Flex flexWrap="inline" w="100%" justifyContent="center" >
                 <Image className="trail-page-img" src={pictures[0]} w="50%" alt="trail page image" m="5px" borderRadius="5"/>
-                <Box w="50%" mt="auto" mb="auto" p="20px">
+                <Box w="50%" mt="auto" mb="auto" pl="20px">
                     {map}
                 </Box>
                 
             </Flex>
             {/* {map} */}
-            <Box  w="80%" ml="calc(10% - 25px)">
+            <Box  w="80%" ml="calc(10% - 25px)" maxW="600px">
                 {/* Add 1st table */}
-                    <TableContainer  border="2px ridge" mt="10px" borderRadius="5px">
-                        <Table variant='simple'  >
-                            <Thead>
+                    <TableContainer  border="2px ridge" mt="10px" borderRadius="5px" backgroundColor="white">
+                        <Table variant='simple' >
+                            <Thead >
                             <Tr>
-                                <Th>Difficulty</Th>
-                                <Th>Miles</Th>
-                                <Th>Estimated Time</Th>
-                                <Th>Type</Th>
+                                <Th fontFamily="Lato">Difficulty</Th>
+                                <Th fontFamily="Lato">Miles</Th>
+                                <Th fontFamily="Lato">Estimated Time</Th>
+                                <Th fontFamily="Lato">Type</Th>
                             </Tr>
                             </Thead>
-                            <Tbody>
-                            <Tr>
+                            <Tbody >
+                            <Tr borderTop="ridge 1.5px" fontFamily="Lato">
                                 <Td>{difficulty}</Td>
                                 <Td>{mileage}</Td>
                                 <Td>{estimated_time}</Td>
@@ -460,18 +488,18 @@ function TrailPage({isLoggedIn}){
                     </TableContainer>
 
             </Box>
-            <Flex flexWrap="inline" w="100%" ml="calc(10% - 25px)">
+            <Flex flexWrap="inline" w="100%" ml="calc(10% - 25px)" mt="10px">
                 <Flex w="80%">
-                    <TableContainer w="70%" >
-                        <Table variant="simple">
+                    <TableContainer w="70%" border="2px ridge" backgroundColor="white"  maxW="600px">
+                        <Table variant="simple" fontFamily="Lato">
                             <Thead>
                                 <Tr>
-                                    <Th>Recommended Food</Th>
-                                    <Th>Recommended Water</Th>
+                                    <Th fontFamily="Lato">Recommended Food</Th>
+                                    <Th fontFamily="Lato">Recommended Water</Th>
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                <Tr>
+                                <Tr borderTop="ridge 1.5px">
                                     <Td>{burgerIcon}</Td>
                                     <Td>{waterIcon}</Td>
                                 </Tr>
@@ -481,7 +509,7 @@ function TrailPage({isLoggedIn}){
                     {/* creating stats table for the elevation */}
                     <Flex textAlign = "right" w="30%">
                         <StatGroup w="100%"  mt="10px">
-                            <Stat>
+                            <Stat fontFamily="Lato">
                                 <StatLabel>Starting Elevation</StatLabel>
                                 <StatNumber>{starting_elevation} ft</StatNumber>
                                 <StatHelpText>
@@ -497,10 +525,10 @@ function TrailPage({isLoggedIn}){
             {isLoggedIn ? 
                 <>
                     <form onSubmit={handleAddReview} >
-                        <Box w="80%" ml="calc(10% - 25px)" mt="50px">
+                        <Box w="80%" ml="calc(10% - 25px)" mt="50px" fontFamily="Lato">
                             <FormControl isRequired  >
                                 <FormLabel>Add a Review!</FormLabel>
-                                <Textarea onChange={handleReviewChange}></Textarea>            
+                                <Textarea onChange={handleReviewChange} borderColor="black" backgroundColor="white"></Textarea>            
                             </FormControl>
                             <Button type="submit" float="right" mt="10px"  mb="50px">Submit</Button>
                         </Box>
@@ -511,7 +539,7 @@ function TrailPage({isLoggedIn}){
             {/* <Divider mt="50px"/> */}
 
             {/* Add reviews */}
-            <Text fontSize='2xl' fontWeight="semibold" ml="25px" mt="50px">User Reviews</Text>
+            <Text fontFamily="Lato" fontSize='2xl' fontWeight="semibold" ml="25px" mt="50px">User Reviews</Text>
             {reviews}
         </Box>
         </>

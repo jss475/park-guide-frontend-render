@@ -39,7 +39,7 @@ function TrailsCard({trail}) {
     }
 
       return (
-        <Box w="calc(100% * (1/4) - 25px - 20px)" borderWidth='1px' borderRadius='lg' overflow='hidden' m='5' onClick={handleTrailCardClick}>
+        <Box w="calc(100% * (1/4) - 25px - 20px)" backgroundColor="white" borderColor="black" fontFamily="Lato" borderWidth='1px' borderRadius='lg' overflow='hidden' m='5' onClick={handleTrailCardClick}>
           <Image src={pictures[0]} alt="Picture of trail" w="100%" pl="10px" pr="10px" pt="10px" borderRadius="20px"/>
             <Box p='6'>
                 {/* difficult + route_type + estimate_time */}
@@ -62,6 +62,7 @@ function TrailsCard({trail}) {
                     as='h4'
                     lineHeight='tight'
                     noOfLines={1}
+                    fontFamily="Raleway"
                     >
                     {name}
                 </Box>

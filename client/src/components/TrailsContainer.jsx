@@ -13,7 +13,7 @@ function TrailsContainer() {
             .then(data => setAllTrails(data))
     },[])
 
-
+    console.log(allTrails)
     //create filter based off of upvote
     if(allTrails.length > 0){
         allTrails.sort(function(a,b) {
@@ -22,7 +22,7 @@ function TrailsContainer() {
     }
     return(
         <>
-            <Heading mt="40px" ml="25px">Trails at Yosemite!</Heading>
+            <Heading mt="40px" ml="25px" fontFamily="Raleway">Trails at Yosemite!</Heading>
             <Flex flexWrap="wrap" justifyContent="left" >
                 {allTrails.map(trail => {
                     return <TrailsCard key={trail.id} trail={trail}/>

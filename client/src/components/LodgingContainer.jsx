@@ -30,7 +30,7 @@ function LodgingContainer(){
 
     return(
         <>
-            <Heading mt="40px" ml="25px">Lodging at Yosemite!</Heading>
+            <Heading mt="40px" ml="25px" fontFamily="Raleway">Lodging at Yosemite!</Heading>
             <Flex flexWrap="wrap" justifyContent="left" >
                 {allLodging.map(lodging => {
                 return <LodgingCard key={lodging.id} lodging={lodging} />

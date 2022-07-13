@@ -36,7 +36,7 @@ function FoodContainer(){
 
     return (
         <>
-            <Heading mt="40px" ml="25px">Restaurants at Yosemite!</Heading>
+            <Heading mt="40px" ml="25px" fontFamily="Raleway">Restaurants at Yosemite!</Heading>
             <Flex flexWrap="wrap" justifyContent="left" >
                 {restaurants.map(food=> {
                     return <FoodCard key={food.id} food={food} />
@@ -45,7 +45,7 @@ function FoodContainer(){
 
             <Divider mt="40px"/>
 
-            <Heading mt="40px" ml="25px">Groceries at Yosemite!</Heading>
+            <Heading mt="40px" ml="25px" fontFamily="Raleway">Groceries at Yosemite!</Heading>
             <Flex flexWrap="wrap" justifyContent="left" >
                 {groceries.map(food=> {
                     return <FoodCard key={food.id} food={food} />

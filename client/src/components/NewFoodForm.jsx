@@ -7,6 +7,9 @@ function NewFoodForm({isLoggedIn}){
     const [errors, setErrors] = useState([])
     let history = useHistory()
 
+     //set const for all inputs
+     const [allInputs, setAllInputs] = useState({pictures: []})
+
     //prepend website with https:// if not already present
     function addhttp(url) {
         if (!/^(?:f|ht)tps?\:\/\//.test(url)) {
@@ -20,16 +23,19 @@ function NewFoodForm({isLoggedIn}){
         
         let form = new FormData(document.querySelector("#new-food-form"))
         //append website if needed
-        form.append("website", addhttp(form.get("website")))
 
         let req = await fetch("/foods", {
             method: "POST",
-            body: form
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(allInputs)
         })
         if(req.ok){
             setErrors(['Thanks for successfully submitting!'])
             let res = req.json()
             console.log(res)
+            history.push('/yosemite/food')
         }else{
             let res = await req.json()
             let err_array = []
@@ -40,6 +46,7 @@ function NewFoodForm({isLoggedIn}){
             }
             setErrors(err_array)
         }
+
     }
 
     let disabled_val
@@ -50,25 +57,25 @@ function NewFoodForm({isLoggedIn}){
     }
 
     return (
-        <Box mt="60px" w="80%" ml="auto" mr="auto">  
-            <Heading mb="15px">Please Add a Restaurant/Grocery!</Heading>
+        <Box mt="60px" w="80%" ml="auto" mr="auto" fontFamily="Lato">  
+            <Heading fontFamily="Raleway" mb="15px">Please Add a Restaurant/Grocery!</Heading>
             {errors.map(error => <Text color="red">{error}</Text>)}
             <form id="new-food-form" onSubmit={handleNewFoodSubmit}>
                 <FormControl isRequired>
                     <FormLabel>Name</FormLabel>
-                    <Input name="name" placeholder="Enter name of the place"/>
+                    <Input backgroundColor="white" name="name" placeholder="Enter name of the place" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
                 </FormControl>
                 <FormControl isRequired w="300px" mt="10px">
                     <FormLabel>Address</FormLabel>
-                    <Input name="address" placeholder="Enter the address"/>
+                    <Input backgroundColor="white" name="address" placeholder="Enter the address" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
                 </FormControl>
                 <FormControl isRequired w="300px" mt="10px">
                     <FormLabel>Website</FormLabel>
-                    <Input name = "website" placeholder="Enter the website"/>
+                    <Input backgroundColor="white" name = "website" placeholder="Enter the website" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: addhttp(e.target.value)})}/>
                 </FormControl>
                 <FormControl isRequired w="300px" mt="10px">
                     <FormLabel>Food Type</FormLabel>
-                    <Select name="food_type" placeholder = 'Select the food type'>
+                    <Select backgroundColor="white" name="food_type" placeholder = 'Select the food type' onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}>
                         <option value="African">African</option>
                         <option value="Asian">Asian</option>
                         <option value="American">American</option>
@@ -81,15 +88,15 @@ function NewFoodForm({isLoggedIn}){
                 </FormControl>
                 <FormControl isRequired mt="10px">
                     <FormLabel>Description</FormLabel>
-                    <Textarea name = "description" placeholder="Enter a description"/>
+                    <Textarea backgroundColor="white" name = "description" placeholder="Enter a description" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
                     <FormHelperText>Minimum 50 characters</FormHelperText>
                 </FormControl>
                 <FormControl isRequired w="300px" mt="10px">
                     <FormLabel>Picture</FormLabel>
-                    <Input name = "pictures" placeholder="Enter URL for picture"/>
+                    <Input backgroundColor="white" name = "pictures" placeholder="Enter URL for picture" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: [e.target.value]})}/>
                 </FormControl>
                 {/* Disable button when not logged in */}
-                <Button disabled={disabled_val} type="submit" mt="15px" >Submit</Button>
+                <Button colorScheme="blue" mb="50px" disabled={disabled_val} type="submit" mt="15px" >Submit</Button>
             </form>
     </Box>
     )

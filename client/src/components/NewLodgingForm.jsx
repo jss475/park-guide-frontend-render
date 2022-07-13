@@ -54,6 +54,7 @@ function NewLodgingForm({isLoggedIn}){
             }
             setErrors(err_array)
             }
+        history.push("/yosemite/lodging")
     }
 
 
@@ -91,41 +92,41 @@ function NewLodgingForm({isLoggedIn}){
         }
 
     }
-    console.log(allInputs)
+
     
     return (
-        <Box mt="60px" w="80%" ml="auto" mr="auto">  
-            <Heading mb="15px">Please Add a Lodging!</Heading>
+        <Box mt="60px" w="80%" ml="auto" mr="auto" fontFamily="Lato">  
+            <Heading mb="15px" fontFamily="Raleway">Please Add a Lodging!</Heading>
             {errors.map(error => <Text color="red">{error}</Text>)}
             <form id="new-lodging-form" onSubmit={handleNewLodgingSubmit}>
                 <FormControl isRequired>
                     <FormLabel>Name</FormLabel>
-                    <Input name="name" placeholder="Enter name of the place" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
+                    <Input w="600px" backgroundColor="white" name="name" placeholder="Enter name of the place" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
                 </FormControl>
                 <FormControl isRequired w="300px" mt="10px">
                     <FormLabel>Address</FormLabel>
-                    <Input name="address" placeholder="Enter the address" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
+                    <Input backgroundColor="white" name="address" placeholder="Enter the address" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
                 </FormControl>
                 <FormControl isRequired w="300px" mt="10px">
                     <FormLabel>Website</FormLabel>
-                    <Input name = "website" placeholder="Enter the website" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
+                    <Input backgroundColor="white" name = "website" placeholder="Enter the website" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
                 </FormControl>
                 <Flex mt="15px">
                     <FormControl>
                         <FormLabel>Lodging Amenity</FormLabel>
                         <Stack >
                             <CheckboxGroup >
-                                <Checkbox  name = "room_service" value="Room Service" onChange={handleLodgingAmenityChange}>Room Service</Checkbox>
-                                <Checkbox  name = "dining" value="Dining" onChange={handleLodgingAmenityChange}>Dining</Checkbox>
-                                <Checkbox  value="Free Guest Parking" onChange={handleLodgingAmenityChange}>Free Guest Parking</Checkbox>
-                                <Checkbox  value="Valet" onChange={handleLodgingAmenityChange}>Valet</Checkbox>
-                                <Checkbox  value="Gift Shop" onChange={handleLodgingAmenityChange}>Gift Shop</Checkbox>
-                                <Checkbox  value="ADA Accessible" onChange={handleLodgingAmenityChange}>ADA Accessible</Checkbox>
-                                <Checkbox  value="Golf Course" onChange={handleLodgingAmenityChange}>Golf Course</Checkbox>
-                                <Checkbox  value="Swimming Pool" onChange={handleLodgingAmenityChange}>Swimming Pool</Checkbox>
-                                <Checkbox  value="Non Smoking" onChange={handleLodgingAmenityChange}>Non Smoking</Checkbox>
-                                <Checkbox  value="Concierge" onChange={handleLodgingAmenityChange}>Concierge</Checkbox>
-                                <Checkbox  value="Shuttle Access" onChange={handleLodgingAmenityChange}>Shuttle Access</Checkbox>
+                                <Checkbox borderColor="black" name = "room_service" value="Room Service" onChange={handleLodgingAmenityChange}>Room Service</Checkbox>
+                                <Checkbox borderColor="black" name = "dining" value="Dining" onChange={handleLodgingAmenityChange}>Dining</Checkbox>
+                                <Checkbox borderColor="black" value="Free Guest Parking" onChange={handleLodgingAmenityChange}>Free Guest Parking</Checkbox>
+                                <Checkbox borderColor="black" value="Valet" onChange={handleLodgingAmenityChange}>Valet</Checkbox>
+                                <Checkbox borderColor="black" value="Gift Shop" onChange={handleLodgingAmenityChange}>Gift Shop</Checkbox>
+                                <Checkbox borderColor="black" value="ADA Accessible" onChange={handleLodgingAmenityChange}>ADA Accessible</Checkbox>
+                                <Checkbox borderColor="black" value="Golf Course" onChange={handleLodgingAmenityChange}>Golf Course</Checkbox>
+                                <Checkbox borderColor="black" value="Swimming Pool" onChange={handleLodgingAmenityChange}>Swimming Pool</Checkbox>
+                                <Checkbox borderColor="black" value="Non Smoking" onChange={handleLodgingAmenityChange}>Non Smoking</Checkbox>
+                                <Checkbox borderColor="black" value="Concierge" onChange={handleLodgingAmenityChange}>Concierge</Checkbox>
+                                <Checkbox borderColor="black" value="Shuttle Access" onChange={handleLodgingAmenityChange}>Shuttle Access</Checkbox>
                             </CheckboxGroup>
                         </Stack>
                     </FormControl>
@@ -133,30 +134,30 @@ function NewLodgingForm({isLoggedIn}){
                         <FormLabel>Room Amenity</FormLabel>
                         <Stack >
                             <CheckboxGroup >
-                                <Checkbox  value="Hair Dryer" onChange={handleRoomAmenityChange}>Hair Dryer</Checkbox>
-                                <Checkbox  value="Room Service" onChange={handleRoomAmenityChange}>Room Service</Checkbox>
-                                <Checkbox  value="Private Room" onChange={handleRoomAmenityChange}>Private Room</Checkbox>
-                                <Checkbox  value="Shared Room" onChange={handleRoomAmenityChange}>Shared Room</Checkbox>
-                                <Checkbox  value="Rollaway Crib" onChange={handleRoomAmenityChange}>Rollaway Crib</Checkbox>
-                                <Checkbox  value="Non-Smoking" onChange={handleRoomAmenityChange}>Non-Smoking</Checkbox>
-                                <Checkbox  value="Iron/Ironing Board" onChange={handleRoomAmenityChange}>Iron/Ironing Board</Checkbox>
-                                <Checkbox  value="Flat Screen TV" onChange={handleRoomAmenityChange}>Flat Screen TV</Checkbox>
-                                <Checkbox  value="Mini Fridge" onChange={handleRoomAmenityChange}>Mini Fridge</Checkbox>
-                                <Checkbox  value="No Pets Allowed" onChange={handleRoomAmenityChange}>No Pets Allowed</Checkbox>
-                                <Checkbox  value="Toiletries" onChange={handleRoomAmenityChange}>Toiletries</Checkbox>
-                                <Checkbox  value="Balcony/Patio" onChange={handleRoomAmenityChange}>Balcony/Patio</Checkbox>
-                                <Checkbox  value="Daily Housekeeping" onChange={handleRoomAmenityChange}>Daily Housekeeping</Checkbox>
-                                <Checkbox  value="Telephone" onChange={handleRoomAmenityChange}>Telephone</Checkbox>
+                                <Checkbox borderColor="black" value="Hair Dryer" onChange={handleRoomAmenityChange}>Hair Dryer</Checkbox>
+                                <Checkbox borderColor="black" value="Room Service" onChange={handleRoomAmenityChange}>Room Service</Checkbox>
+                                <Checkbox borderColor="black" value="Private Room" onChange={handleRoomAmenityChange}>Private Room</Checkbox>
+                                <Checkbox borderColor="black" value="Shared Room" onChange={handleRoomAmenityChange}>Shared Room</Checkbox>
+                                <Checkbox borderColor="black" value="Rollaway Crib" onChange={handleRoomAmenityChange}>Rollaway Crib</Checkbox>
+                                <Checkbox borderColor="black" value="Non-Smoking" onChange={handleRoomAmenityChange}>Non-Smoking</Checkbox>
+                                <Checkbox borderColor="black" value="Iron/Ironing Board" onChange={handleRoomAmenityChange}>Iron/Ironing Board</Checkbox>
+                                <Checkbox borderColor="black" value="Flat Screen TV" onChange={handleRoomAmenityChange}>Flat Screen TV</Checkbox>
+                                <Checkbox borderColor="black" value="Mini Fridge" onChange={handleRoomAmenityChange}>Mini Fridge</Checkbox>
+                                <Checkbox borderColor="black" value="No Pets Allowed" onChange={handleRoomAmenityChange}>No Pets Allowed</Checkbox>
+                                <Checkbox borderColor="black" value="Toiletries" onChange={handleRoomAmenityChange}>Toiletries</Checkbox>
+                                <Checkbox borderColor="black" value="Balcony/Patio" onChange={handleRoomAmenityChange}>Balcony/Patio</Checkbox>
+                                <Checkbox borderColor="black" value="Daily Housekeeping" onChange={handleRoomAmenityChange}>Daily Housekeeping</Checkbox>
+                                <Checkbox borderColor="black" value="Telephone" onChange={handleRoomAmenityChange}>Telephone</Checkbox>
                             </CheckboxGroup>
                         </Stack>
                     </FormControl>
                 </Flex>
-                <FormControl isRequired w="300px" mt="10px">
+                <FormControl isRequired  mt="10px">
                     <FormLabel>Picture</FormLabel>
-                    <Input name = "image" placeholder="Enter URL for picture" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
+                    <Input backgroundColor="white" name = "image" placeholder="Enter URL for picture" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
                 </FormControl>
                 {/* Disable button when not logged in */}
-                <Button disabled={disabled_val} type="submit" mt="15px" >Submit</Button>
+                <Button colorScheme="blue" disabled={disabled_val} type="submit" mt="15px" mb="50px">Submit</Button>
             </form>
     </Box>
     )

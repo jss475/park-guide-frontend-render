@@ -31,7 +31,7 @@ class TrailsController < ApplicationController
     private
 
     def trail_params
-        params.permit(:id, :name, :location, :proximity, :mileage, :elevation_gain, :starting_elevation, :route_type, :difficulty, :estimated_time, :pictures, :food, :water, :upvote, :downvote, :starting_lat, :starting_long, :permit?)
+        params.permit(:id, :name, :location, :proximity, :mileage, :elevation_gain, :starting_elevation, :route_type, :difficulty, :estimated_time, :food, :water, :upvote, :downvote, :starting_lat, :starting_long, :permit?, :pictures => [])
     end
 
     def trail_find

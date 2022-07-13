@@ -1,5 +1,6 @@
 .trail-page-container {
     margin-top: 60px;
+    font-family: 'Lato', sans-serif;
     /* text-align: center */
 }
 
@@ -18,4 +19,17 @@
 
 .trail-page-image {
     max-height: 480px;
+}
+
+.trail-page-heading{
+    font-family: 'Raleway', serif;
+    font-weight: bold;
+}
+
+.trail-page-description{
+    font-family: 'Lato', sans-serif;
+}
+
+.trail-page-text{
+    font-family: 'Lato', sans-serif;
 }

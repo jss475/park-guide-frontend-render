@@ -16,11 +16,13 @@ import {
     AccordionPanel,
     AccordionIcon,
     Box,
-    Flex
+    Flex,
+    Image
   } from '@chakra-ui/react'
 import { useDisclosure } from '@chakra-ui/react'
 import {GiHamburgerMenu} from 'react-icons/gi'
 import '../navbar.css'
+import logo from '../park_guide.gif'
 // import {Link as ReachLink} from '@reach/router'
 
 function NavBar({isLoggedIn, handleLSLoggedIn}){
@@ -67,8 +69,8 @@ function NavBar({isLoggedIn, handleLSLoggedIn}){
     }
 
   return (
-    <>
-      <Button ref={btnRef} leftIcon={<GiHamburgerMenu />}colorScheme='teal' onClick={onOpen} variant='outline' position="fixed" top="0" right = "0" m='4'>
+    <Box >
+      <Button className="navbar-text" ref={btnRef} leftIcon={<GiHamburgerMenu />}colorScheme='teal' onClick={onOpen} variant='outline' position="fixed" top="0" right = "0" m='4'>
         Open
       </Button>
       <Drawer
@@ -80,9 +82,9 @@ function NavBar({isLoggedIn, handleLSLoggedIn}){
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>
+          <DrawerHeader ml="auto" mr="auto" mb="-30px">
             <Link as={ReactLink} to='/about' onClick={onClose}>
-              Park Guide
+              <Image src={logo} alt="Logo" h="150px"/>
             </Link>
           </DrawerHeader>
           {/* This is where I put in the links */}
@@ -90,24 +92,24 @@ function NavBar({isLoggedIn, handleLSLoggedIn}){
           <DrawerBody>
             {isLoggedIn ? 
               <Box mb="15px">
-                  <Link as={ReactLink} to='/me' onClick={onClose}>
+                  <Link className="navbar-text" as={ReactLink} to='/me' onClick={onClose}>
                     Me!
                   </Link>
               </Box>
              : null }
-            <Box>
+            {/* <Box>
               <Link as={ReactLink} to='/about' className="navbar-about" onClick={onClose}>
                 About
               </Link>
-            </Box>
+            </Box> */}
             
             <h1 className="navbar-title">National Parks</h1>
-            <Accordion defaultIndex={[0]} allowMultiple>
+            <Accordion defaultIndex={[0]} allowMultiple >
               <AccordionItem>
                 <h2>
                   <AccordionButton>
                     <Box flex='1' textAlign='left'>
-                      <Link as={ReactLink} to='/yosemite'>
+                      <Link className="navbar-text" as={ReactLink} to='/yosemite'>
                         Yosemite
                       </Link>
                     </Box>
@@ -115,51 +117,54 @@ function NavBar({isLoggedIn, handleLSLoggedIn}){
                   </AccordionButton>
                 </h2>
                 <AccordionPanel pb={4}>
-                  <Link as={ReactLink} to='/yosemite/lodging' onClick={onClose}>
+                  <Link className="navbar-text" as={ReactLink} to='/yosemite/lodging' onClick={onClose}>
                     Lodging
                   </Link>
        
                 </AccordionPanel>
                 <AccordionPanel pb={4}>
-                  <Link as={ReactLink} to='/yosemite/food' onClick={onClose}>
+                  <Link className="navbar-text" as={ReactLink} to='/yosemite/food' onClick={onClose}>
                       Food
                   </Link>
                 </AccordionPanel>
                 <AccordionPanel pb={4}>
-                  <Link as={ReactLink} to='/yosemite/trails' onClick={onClose}>
+                  <Link className="navbar-text" as={ReactLink} to='/yosemite/trails' onClick={onClose}>
                       Trails
                   </Link>
                 </AccordionPanel>
               </AccordionItem>
             </Accordion>
-          </DrawerBody>
+          
+
+          
           {/* When logged in you can add stuff */}
+          {/* got rid of drawer body encapsulating the Flexs, can always add back in */}
           {isLoggedIn ? 
-          <DrawerBody>
-            <Flex flexDirection="column">
-              <Button onClick={handleAddTrailClick}>Add a Trail!</Button>
-              <Button  onClick={handleAddLodgingClick} mt="10px">Add Lodging!</Button>
-              <Button onClick = {handleAddFoodClick} mt="10px">Add Food!</Button>
+          
+            <Flex flexDirection="column" mt="20px">
+              <Button className="navbar-text" onClick={handleAddTrailClick}>Add a Trail!</Button>
+              <Button className="navbar-text" onClick={handleAddLodgingClick} mt="10px">Add Lodging!</Button>
+              <Button className="navbar-text" onClick = {handleAddFoodClick} mt="10px">Add Food!</Button>
             </Flex>
-          </DrawerBody> :
+          :
           null
           }
-
+          </DrawerBody>
           <DrawerFooter>
             {!isLoggedIn ? 
               <>
-                  <Button colorScheme='blue' mr={3} onClick={()=> {
+                  <Button className="navbar-text" colorScheme='blue' mr={3} onClick={()=> {
                     handleLoginClick()
                     onClose()
                   }}>Sign In</Button>
-                  <Button colorScheme='blue' mr={3} onClick={()=> {
+                  <Button className="navbar-text" colorScheme='blue' mr={3} onClick={()=> {
                     handleSignUpClick()
                     onClose()
                   }}>
                   Sign Up
                   </Button> 
               </> :
-                <Button variant='outline' mr={3} onClick={()=> {
+                <Button className="navbar-text" variant='outline' mr={3} onClick={()=> {
                   onClose()
                   handleLogOut()
                   }}>
@@ -169,7 +174,7 @@ function NavBar({isLoggedIn, handleLSLoggedIn}){
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
-    </>
+    </Box>
   )
 }
 

@@ -24,22 +24,11 @@ function LodgingCard({lodging}){
     
     return (
         <>
-        <Box w="calc(100% * (1/4) - 25px - 20px)" height="320px" borderWidth='1px' borderRadius='lg' overflow='hidden' m='5' onClick={handleLodgingCardClick}>
-          <Image src={image} alt="Picture of lodging" w="100%"  pl="10px" pr="10px" pt="10px" borderRadius="20px"/>
-            <Box p='6'>
+        <Box w="calc(100% * (1/4) - 25px - 20px)" fontFamily="Lato" backgroundColor="white" borderColor="black" maxH="300px" borderWidth='1px' borderRadius='lg' overflow='hidden' m='5' onClick={handleLodgingCardClick}>
+          <Image src={image} alt="Picture of lodging" w="100%" maxH="195px" pl="10px" pr="10px" pt="10px" borderRadius="20px"/>
+            <Box mt="-15px" p='6'>
                 {/* difficult + route_type + estimate_time */}
-                <Box display='flex' alignItems='baseline'>
-                    <Box
-                        color='gray.500'
-                        fontWeight='semibold'
-                        letterSpacing='wide'
-                        fontSize='sm'
-                        textTransform='uppercase'
-                        ml='0'
-                    >
-                        {/* {difficulty} &bull; {route_type} &bull; {estimated_time} ({mileage} mi) */}
-                    </Box>
-                </Box>
+
                 {/* title of the card */}
                 <Box
                     mt='1'
@@ -47,6 +36,7 @@ function LodgingCard({lodging}){
                     as='h4'
                     lineHeight='tight'
                     noOfLines={5}
+                    fontFamily="Raleway"
                     >
                     {name}
                 </Box>

@@ -100,7 +100,7 @@ class UserTrailsController < ApplicationController
     private
 
     def ut_params
-        params.permit(:id, :user_id, :trail_id, :upvote?, :downvote?, :favorite?, :review)
+        params.permit(:id, :user_id, :trail_id, :upvote?, :downvote?, :favorite?, :review, :updated_at)
     end
 
     def ut_w_all

@@ -37,22 +37,24 @@
 }
 
 .about-text{
-    font-family: 'Cantora One', sans-serif;
+    /* font-family: 'Cantora One', sans-serif; */
     background-color: rgb(245, 184, 118);
     padding: 50px;
+    font-family: "Raleway", sans-serif
 }
 
 .about-text2{
-    font-family: 'Cantora One', sans-serif;
+    /* font-family: 'Cantora One', sans-serif; */
+    font-family: "Raleway", sans-serif
 }
 
 .about-heading{
-    font-family: "Oswald", sans-serif
+    font-family: "Raleway", sans-serif
     /* font-family: 'Lato', sans-serif; */
 }
 
 .about-title{
-    font-family: "Oswald", sans-serif
+    font-family: "Raleway", sans-serif
 }
 
 .shenandoah{
@@ -93,4 +95,8 @@
 
 .hover{
     border-radius: 10px
+}
+
+.about-logo {
+    background-blend-mode: multiply;
 }

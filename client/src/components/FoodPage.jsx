@@ -1,19 +1,23 @@
 import {useState, useEffect} from 'react'
-import {useParams} from 'react-router-dom'
+import {useParams, useHistory} from 'react-router-dom'
 import {Heading, Box, Image, Text, Flex, Spacer, Link, Divider, Avatar, FormControl, FormLabel, Textarea, Button, Icon} from '@chakra-ui/react'
 import {FiExternalLink} from 'react-icons/fi'
 import {BiUpvote, BiDownvote} from 'react-icons/bi'
 import {FaStar, FaRegStar} from 'react-icons/fa'
 import {GoogleMap, useLoadScript, Marker} from "@react-google-maps/api"
+import '../food_page.css'
 
 function FoodPage({isLoggedIn}){
     
     //get id of the food page
     const { id } = useParams()
+    //intialize usehistory to push later on
+    const history = useHistory()
     //set state for retrieving the data to this specific food page
     const [foodData, setFoodData] = useState({
         pictures: [],
-        user_foods: [{reviews: '', user: {name: ''}, ["favorite?"]: ''}]
+        user_foods: [{reviews: '', user: {name: ''}, ["favorite?"]: ''}],
+
     })
 
     //set an on change state for when a review is typed in
@@ -42,16 +46,19 @@ function FoodPage({isLoggedIn}){
     const {isLoaded} = useLoadScript({googleMapsApiKey: process.env.REACT_APP_NEXT_PUBLIC_GOOGLE_MAPS_API_KEY})
     
     //create state to take in the lat and long of the address
-    const [latlong, setLatlong] = useState({lat: "", lng: ""})
+    const [latlong, setLatlong] = useState({lat: '', lng: ''})
 
     //geocoder API call
     useEffect(() => {
         const data = async () => {
-            let req = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?new_forward_geocoder=true&address=${address}&key=${process.env.REACT_APP_NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`);
+            if(address){
+                let added_plus = address.split(' ').join('+')
+                let req = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?new_forward_geocoder=true&address=${added_plus}&key=${process.env.REACT_APP_NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`);
 
-            if (req.ok){
-                let res = await req.json()
-                setLatlong(res.results[0].geometry.location)
+                if (req.ok){
+                    let res = await req.json()
+                    setLatlong(res.results[0].geometry.location)
+                }
             }
         } 
 
@@ -82,18 +89,21 @@ function FoodPage({isLoggedIn}){
 
             if(req.ok){
                 let res = await req.json()
-
-                fetch(res.properties.forecast)
-                    .then(res => res.json())
-                    .then(data => 
+                
+                const get_forecast = async() => {
+                    let w_req = await fetch(res.properties.forecast)    
+                
+                    if(w_req.ok){
+                        let data = await w_req.json()
                         setWeatherData(data.properties.periods)
-
-                    )
+                    }
+                }
+                get_forecast()
             }
-
         }
-        getWeatherData()
-        
+            if(latlong.lat % 1 !== 0 && latlong.lat !== -34.4845){
+                getWeatherData()
+            }
     },[latlong])
 
     //weather JSX data
@@ -124,13 +134,13 @@ function FoodPage({isLoggedIn}){
                 weather = temp_low_filtered.map((day,index) => {
                     return(
                         <>
-                            <Box borderWidth="1px" padding="5px" borderColor="grey" className="weather-box">
-                                <Text textAlign="center">{day.name}</Text>
-                                <Image src = {day.icon} w="120px" borderRadius="10px"/>
+                            <Box borderWidth="1px" padding="5px" borderColor="grey" className="weather-box" backgroundColor="white">
+                                <Text textAlign="center" className="food-text">{day.name}</Text>
+                                <Image src = {day.icon} w="90px" borderRadius="10px" ml="auto" mr="auto"/>
                                 <Flex flexWrap="inline">
-                                    <Text color="grey">{day.temperature} F</Text>
+                                <Text color="grey" className="food-text" pr="5px">{day.temperature} F</Text>
                                     <Spacer />
-                                    <Text color="grey">{filtered_output[index].temperature} F</Text>
+                                    <Text color="grey" className="food-text" pl="5px">{filtered_output[index].temperature} F</Text>
                                 </Flex>
                             </Box>
                         </>
@@ -141,13 +151,13 @@ function FoodPage({isLoggedIn}){
                 weather = filtered_output.map((day,index) => {
                     return(
                         <>
-                            <Box borderWidth="1px" padding="5px" borderColor="grey" className="weather-box">
-                                <Text textAlign="center">{day.name}</Text>
-                                <Image src = {day.icon} w="120px" borderRadius="10px"/>
+                            <Box borderWidth="1px" padding="5px" borderColor="grey" className="weather-box" backgroundColor="white">
+                                <Text textAlign="center" className="food-text">{day.name}</Text>
+                                <Image src = {day.icon} w="90px" borderRadius="10px" ml="auto" mr="auto"/>
                                 <Flex flexWrap="inline">
-                                    <Text color="grey">{day.temperature} F</Text>
+                                    <Text color="grey" className="food-text" pl="5px">{day.temperature} F</Text>
                                     <Spacer />
-                                    <Text color="grey">{temp_low_filtered[index].temperature} F</Text>
+                                    <Text color="grey" className="food-text" pr="5px">{temp_low_filtered[index].temperature} F</Text>
                                 </Flex>
                             </Box>
                         </>
@@ -162,6 +172,11 @@ function FoodPage({isLoggedIn}){
 
     //on click for the upvote
     function handleUpvoteClick(){
+        //if you aren't logged in you get pushed to login
+        if(!isLoggedIn){
+            history.push('/login')
+        }
+
         const user_id = localStorage.getItem("id")
         const configObj = {
             method: "POST",
@@ -190,6 +205,11 @@ function FoodPage({isLoggedIn}){
 
     //on click for the downvote
     function handleDownvoteClick(){
+        //if you aren't logged in you get pushed to login
+        if(!isLoggedIn){
+            history.push('/login')
+        }
+
         const user_id = localStorage.getItem("id")
         const configObj = {
             method: "POST",
@@ -253,8 +273,11 @@ function FoodPage({isLoggedIn}){
             }
             //see if this user trail table/data exists already
             let filteredIndex
+           
             let filtered_data = foodData.user_foods.filter((uf,index) => {
-                filteredIndex = index
+                if(uf.id === filter_id){
+                    filteredIndex = index
+                }
                 return uf.id === filter_id})
   
             //if it exists, replace the old isntance and replace with the new instance
@@ -275,6 +298,11 @@ function FoodPage({isLoggedIn}){
 
     //handle clicking the favorite button
     function handleFavClick(){
+        //if you aren't logged in you get pushed to login
+        if(!isLoggedIn){
+            history.push('/login')
+        }
+
         setFavClicked(prev => !prev)
         const user_id = localStorage.getItem("id")
 
@@ -356,12 +384,17 @@ function FoodPage({isLoggedIn}){
     //map out the reviews with the user name
    let reviews = []
    if(user_foods){
-    reviews = user_foods.map(uf => {
+    reviews = user_foods.sort(function(a,b) {
+        let a_date = new Date(a.updated_at)
+        let b_date = new Date(b.updated_at)
+        
+        return b_date - a_date
+    }).map(uf => {
         if(uf["review"]){
             return (
                 <div key={uf.id}>
                     <Divider mt="15px"/>
-                    <Box mt="25px"  mb="25px">
+                    <Box mt="25px"  mb="25px" className="food-text" fontFamily="Lato">
                         <Flex flexWrap="inline">
                             <Avatar name={uf.user.name} src='https://bit.ly/broken-link' />
                             <Text mt="1%" ml="10px">{uf.user.name}</Text>
@@ -382,9 +415,9 @@ function FoodPage({isLoggedIn}){
             <Flex flexWrap="inline" justifyContent="center" mt="15px">
                     {weather}
             </Flex>
-            <Box mt="40px" ml = "25px" w="85%">
+            <Box mt="40px" ml = "25px" w="85%" className="food-text" fontFamily="Lato">
                 <Flex flexWrap="inline" w="100%" justifyContent="right">
-                    <Heading w="80%">{name}</Heading>
+                    <Text fontSize="4xl" w="80%" className="food-heading">{name}</Text>
                     <Flex w="20%" justifyContent="right">
                         <Flex flexWrap="inline" mt="auto" mb="auto">
                             <Icon as={BiUpvote} mr="10px" mt = "5px" onClick={handleUpvoteClick}/> 
@@ -399,9 +432,9 @@ function FoodPage({isLoggedIn}){
                         </Flex>
                     </Flex>
                 </Flex>
-                <Flex wrap="inline">
-                    <Image src={pictures[0]} w="60%" borderRadius="20px" maxW="800px" mt="15px"/>
-                    <Box w="40%" p="20px" mt="auto" mb="auto">
+                <Flex wrap="inline" >
+                    <Image src={pictures[0]} w="60%" borderRadius="20px" minH = "350px" maxH = "375px" maxW="800px" mt="auto" mb="auto"/>
+                    <Box w="40%" pl="20px" mt="auto" mb="auto">
                         {map}
                     </Box>
                 </Flex>
@@ -411,22 +444,22 @@ function FoodPage({isLoggedIn}){
                         letterSpacing='wide'
                         fontSize='sm'
                         ml='0'
-                        mt="5px"
+                        mt="-15px"
                     >
                         <Flex flexWrap="inline"> 
-                            <Text>{address}</Text>
+                            <Text className="food-text">{address}</Text>
                             <Spacer />
-                            <Text>{food_type}</Text>    
+                            <Text className="food-text">{food_type}</Text>    
                         </Flex>
                         <Flex flexWrap="inline" color="blue">
-                            <Link href={website} isExternal>
+                            <Link href={website} className="food-text" isExternal>
                                 Official Website 
                             </Link>
                             <FiExternalLink mx="2px"/>
                         </Flex>
                 </Box>
                 <Box mt="15px">
-                    <p style={{"whiteSpace": "pre-line"}}>{description}</p>
+                    <p className="food-description" style={{"whiteSpace": "pre-line"}}>{description}</p>
                 </Box>
                 
             
@@ -438,7 +471,7 @@ function FoodPage({isLoggedIn}){
                             <Box w="80%" ml="auto" mr="auto" mt="50px">
                                 <FormControl isRequired  >
                                     <FormLabel>Add a Review!</FormLabel>
-                                    <Textarea onChange={handleReviewChange}></Textarea>            
+                                    <Textarea onChange={handleReviewChange} borderColor="black" backgroundColor="white"></Textarea>            
                                 </FormControl>
                                 <Button type="submit" float="right" mt="10px"  mb="50px">Submit</Button>
                             </Box>
@@ -448,7 +481,7 @@ function FoodPage({isLoggedIn}){
                 : null}
 
                 {/* Add reviews */}
-                <Text fontSize='2xl' fontWeight="semibold"  mt="50px">User Reviews</Text>
+                <Text className="food-text" fontSize='2xl' fontWeight="semibold"  mt="50px">User Reviews</Text>
                 {reviews}
             </Box>
         </>

@@ -95,7 +95,7 @@ function UserPage(){
                             
                             <AccordionIcon />
                         </AccordionButton>
-                    <Grid templateColumns="repeat(3, 250px)" gap={6}>
+                    <Grid templateColumns="repeat(3, 1fr)" gap={6}>
 
                         {userData ? 
                             user_foods_fav_filtered.map(uf => {
@@ -161,7 +161,7 @@ function UserPage(){
                         
                         <AccordionIcon />
                     </AccordionButton>
-                    <Grid templateColumns="repeat(3, 250px)" gap={6}>
+                    <Grid templateColumns="repeat(3, 1fr)" gap={6}>
                         {userData ? 
                             user_trails_review_filter.map(ut => {
                                 return (
@@ -196,7 +196,7 @@ function UserPage(){
                             <AccordionIcon />
                         </AccordionButton>
                     </h2>
-                <Grid templateColumns="repeat(3, 250px)" gap={6}> 
+                <Grid templateColumns="repeat(3, 1fr)" gap={6}> 
                     {userData ? 
                         user_lodgings_review_filter.map(ul => {
                             return (
@@ -229,7 +229,7 @@ function UserPage(){
                         
                         <AccordionIcon />
                     </AccordionButton>
-                <Grid templateColumns="repeat(3, 250px)" gap={6}>
+                <Grid templateColumns="repeat(3, 1fr)" gap={6}>
                     {userData ? 
                         user_foods_review_filter.map(uf => {
                             return (

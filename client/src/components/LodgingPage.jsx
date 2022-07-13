@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react'
-import {useParams} from 'react-router-dom'
+import {useParams, useHistory} from 'react-router-dom'
 import {Heading, Box, Image, Text, Flex, UnorderedList, ListItem, Spacer, Link, Divider, Avatar, Button, Icon, FormControl, Textarea, FormLabel} from '@chakra-ui/react'
 import {FiExternalLink} from 'react-icons/fi'
 import {BiUpvote, BiDownvote} from 'react-icons/bi'
@@ -12,6 +12,9 @@ function LodgingPage({isLoggedIn}){
     //get the id Data from the history push with UseLocation
     //set the data for the lodging
     const { id } = useParams()
+    //set usehistory to push later
+    const history = useHistory()
+
     const [lodgingData, setLodgingData] = useState({
         user_lodgings: [{reviews: '', user: {id: '',name: '', ["favorite?"]: ''}, lodging: {id: ''}}]
     })
@@ -50,17 +53,24 @@ function LodgingPage({isLoggedIn}){
     //geocoder API call
     useEffect(() => {
         const data = async () => {
-            let req = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?new_forward_geocoder=true&address=${address}&key=${process.env.REACT_APP_NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`);
+            if(address){
+                let added_plus = address.split(' ').join('+')
+                let req = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?new_forward_geocoder=true&address=${added_plus}&key=${process.env.REACT_APP_NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`);
 
-            if (req.ok){
-                let res = await req.json()
-                setLatlong(res.results[0].geometry.location)
+                if (req.ok){
+                    let res = await req.json()
+                    setLatlong(res.results[0].geometry.location)
+                }
             }
         } 
 
        data()
     },[address])
 
+    //creating the google map
+    // const [map, setMap] = useState(<></>)
+ 
+    // console.log(latlong)
     //creating the google map
     let map
     if(!isLoaded){
@@ -71,7 +81,6 @@ function LodgingPage({isLoggedIn}){
             <Marker position={{lat: latlong.lat, lng: latlong.lng}} label="SL"  />
         </GoogleMap>
     }
-    
 
     ////////////////////////////////////////////////////////////////////////////////////
 
@@ -84,18 +93,32 @@ function LodgingPage({isLoggedIn}){
 
             if(req.ok){
                 let res = await req.json()
-
-                fetch(res.properties.forecast)
-                    .then(res => res.json())
-                    .then(data => 
+                
+                const get_forecast = async() => {
+                    console.log(res)
+                    let w_req = await fetch(res.properties.forecast)    
+                
+                    if(w_req.ok){
+                        let data = await w_req.json()
                         setWeatherData(data.properties.periods)
-   
-                    )
+                    }
+                }
+                get_forecast()
             }
-
         }
-        getWeatherData()
-        
+        if(latlong.lat % 1 !== 0){
+            getWeatherData()
+        }
+
+        // if(!isLoaded){
+        //     setMap(<div>Loading...</div>)
+        // }else if(isLoaded && latlong.lat && latlong.lng){
+        //     setMap(<GoogleMap zoom={13} center={{lat: latlong.lat, lng: latlong.lng}} mapContainerClassName="map-container">
+    
+        //         <Marker position={{lat: latlong.lat, lng: latlong.lng}} label="SL"  />
+        //     </GoogleMap>)
+        // }
+            
     },[latlong])
 
     //weather JSX data
@@ -126,13 +149,13 @@ function LodgingPage({isLoggedIn}){
                 weather = temp_low_filtered.map((day,index) => {
                     return(
                         <>
-                            <Box borderWidth="1px" padding="5px" borderColor="grey" className="weather-box">
-                                <Text textAlign="center">{day.name}</Text>
-                                <Image src = {day.icon} w="120px" borderRadius="10px"/>
+                            <Box borderWidth="1px" padding="5px" borderColor="grey" className="weather-box" backgroundColor="white">
+                                <Text textAlign="center" >{day.name}</Text>
+                                <Image src = {day.icon} w="90px" borderRadius="10px" ml="auto" mr="auto"/>
                                 <Flex flexWrap="inline">
-                                    <Text color="grey">{day.temperature} F</Text>
+                                    <Text color="grey"  pr="5px">{day.temperature} F</Text>
                                     <Spacer />
-                                    <Text color="grey">{filtered_output[index].temperature} F</Text>
+                                    <Text color="grey"  pl="5px">{filtered_output[index].temperature} F</Text>
                                 </Flex>
                             </Box>
                         </>
@@ -143,13 +166,13 @@ function LodgingPage({isLoggedIn}){
                 weather = filtered_output.map((day,index) => {
                     return(
                         <>
-                            <Box borderWidth="1px" padding="5px" borderColor="grey" className="weather-box">
-                                <Text textAlign="center">{day.name}</Text>
-                                <Image src = {day.icon} w="120px" borderRadius="10px"/>
+                            <Box borderWidth="1px" padding="5px" borderColor="grey" className="weather-box" backgroundColor="white"> 
+                                <Text textAlign="center" >{day.name}</Text>
+                                <Image src = {day.icon} w="90px" borderRadius="10px" ml="auto" mr="auto"/>
                                 <Flex flexWrap="inline">
-                                    <Text color="grey">{day.temperature} F</Text>
+                                    <Text color="grey"  pl="5px">{day.temperature} F</Text>
                                     <Spacer />
-                                    <Text color="grey">{temp_low_filtered[index].temperature} F</Text>
+                                    <Text color="grey"  pr="5px">{temp_low_filtered[index].temperature} F</Text>
                                 </Flex>
                             </Box>
                         </>
@@ -162,6 +185,11 @@ function LodgingPage({isLoggedIn}){
     /////////////////////////////////////////////////////////////////
     //on click for the upvote
     function handleUpvoteClick(){
+        //if you aren't logged in you get pushed to login
+        if(!isLoggedIn){
+            history.push('/login')
+        }
+
         const user_id = localStorage.getItem("id")
         const configObj = {
             method: "POST",
@@ -190,6 +218,11 @@ function LodgingPage({isLoggedIn}){
 
     //on click for the downvote
     function handleDownvoteClick(){
+        //if you aren't logged in you get pushed to login
+        if(!isLoggedIn){
+            history.push('/login')
+        }
+
         const user_id = localStorage.getItem("id")
         const configObj = {
             method: "POST",
@@ -279,6 +312,11 @@ function LodgingPage({isLoggedIn}){
 
      //handle clicking the favorite button
      function handleFavClick(){
+        //if you aren't logged in you get pushed to login
+        if(!isLoggedIn){
+            history.push('/login')
+        }
+
         if(isLoggedIn){
             setFavClicked(prev => !prev)
         
@@ -305,7 +343,9 @@ function LodgingPage({isLoggedIn}){
                     let filter_id = data.id
                     let filteredIndex
                     let filtered_data = lodgingData.user_lodgings.filter((ul,index)=> {
-                        filteredIndex = index
+                        if(ul.id === filter_id){
+                            filteredIndex = index
+                        }
                         return ul.id === filter_id
                     })
 
@@ -358,12 +398,18 @@ function LodgingPage({isLoggedIn}){
     //map out the reviews with the user name
     let reviews = []
     if(user_lodgings){
-        reviews = user_lodgings.map(ul => {
+        reviews = user_lodgings.sort(function(a,b) {
+            let a_date = new Date(a.updated_at)
+            let b_date = new Date(b.updated_at)
+            
+            return b_date - a_date
+        
+        }).map(ul => {
             if(ul["review"]){
                 return (
                     <>
                     <Divider mt="15px"/>
-                    <Box mt="25px"  mb="25px">
+                    <Box mt="25px"  mb="25px" fontFamily="Lato">
                         <Flex flexWrap="inline">
                             <Avatar name={ul.user.name} src='https://bit.ly/broken-link' />
                             <Text mt="1%" ml="10px">{ul.user.name}</Text>
@@ -380,13 +426,13 @@ function LodgingPage({isLoggedIn}){
 
     return (
         <>
-            <Flex flexWrap="inline" justifyContent="center" mt="15px">
+            <Flex flexWrap="inline" justifyContent="center" mt="15px" fontFamily="Lato">
                 {weather}
             </Flex>
-            <Box mt="40px" ml = "25px" w="85%">
+            <Box mt="40px" ml = "25px" w="85%" fontFamily="Lato">
                 <Flex w="100%" justifyContent="right">
-                    <Heading w="80%">{name}</Heading>
-                    <Flex w="20%" >
+                    <Heading fontFamily="Raleway" w="80%">{name}</Heading>
+                    <Flex w="20%" justifyContent="right">
                         <Flex flexWrap="inline" mt="auto" mb="auto">
                                 <Icon as={BiUpvote} mr="10px" mt = "5px" onClick={handleUpvoteClick}/> 
                                 <Text>{upvote}</Text>
@@ -402,9 +448,9 @@ function LodgingPage({isLoggedIn}){
                 </Flex>
                 
                 
-               <Flex wrap="inline">
-                    <Image src={image} w="60%" borderRadius="20px" maxW="800px" mt="15px"/>
-                    <Box w="40%" p="20px" mt="auto" mb="auto">
+               <Flex wrap="inline" >
+                    <Image src={image} w="60%" borderRadius="20px" minH = "350px" maxH = "37px" maxW="800px" mt="auto" mb="auto" />
+                    <Box w="40%" pl="20px" mt="auto" mb="auto">
                         {map}
                     </Box>
                     
@@ -416,7 +462,7 @@ function LodgingPage({isLoggedIn}){
                         letterSpacing='wide'
                         fontSize='sm'
                         ml='0'
-                        mt = "5px"
+                        mt="-15px"
                     >
                         <Flex flexWrap="inline"> 
                             <Text>{address}</Text>  
@@ -458,7 +504,7 @@ function LodgingPage({isLoggedIn}){
                             <Box w="80%" ml="auto" mr="auto" mt="50px">
                                 <FormControl isRequired  >
                                     <FormLabel>Add a Review!</FormLabel>
-                                    <Textarea onChange={handleReviewChange}></Textarea>            
+                                    <Textarea onChange={handleReviewChange} borderColor="black" backgroundColor="white"></Textarea>            
                                 </FormControl>
                                 <Button type="submit" float="right" mt="10px"  mb="50px">Submit</Button>
                             </Box>
@@ -468,7 +514,7 @@ function LodgingPage({isLoggedIn}){
                 : null}
 
                 {/* Add user reviews */}
-                <Text fontSize='2xl' fontWeight="semibold" mt="50px" mb="50px">User Reviews</Text>
+                <Text fontSize='2xl' fontWeight="semibold" mt="50px" >User Reviews</Text>
                 {reviews}
             </Box>
 

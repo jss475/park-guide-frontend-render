@@ -1,4 +1,5 @@
 import logo from '../park_guide.gif'
+import logo2 from '../park_guide.svg'
 import yosemite from '../yosemite1.jpg'
 import yosemite2 from '../yosemite2.jpg'
 import great_smokey from '../great_smokey2.jpg'
@@ -18,12 +19,12 @@ function About(){
             <Box >
                 <Flex ml="25px" w="95%">
                     <Text className = "about-text" w="50%" mt="auto" mb="auto" >Park Guide aims to consolidate all the information you would need to visit a national park! Our mission is to help minimize the tabs that you have open when figuring out what to do at a national park. Nobody wants to have to read through twenty blogs, another five websites, or even books about a travel desination. Who wants to stress about a trip when it's supposed to be relaxing? We want you to connect with nature as soon as possible without all the hassle that usually comes with planning a trip. </Text>
-                    <Image w="50%" src={logo} alt="logo" ml="auto" mr="auto"></Image>
+                    <Image w="50%" src={logo2} alt="logo" ml="auto" mr="auto" className="about-logo"></Image>
                 </Flex>
                 <Flex ml="25px">
                     <Image w="50%" borderRadius="10px" src = {yosemite2} className="yosemite-img-2" ></Image>
                     <Image w="50%" borderRadius="10px" src= {yosemite} className="yosemite-img-1" position="absolute"></Image>
-                    <Text w="50%" mt="auto" mb="auto" textAlign="center" padding="10px" fontSize="3xl" className="about-text2">
+                    <Text w="50%" mt="auto" mb="auto" textAlign="center" padding="15px" fontSize="3xl" className="about-text2">
                         Come check out all the national parks that the US has to offer!
                     </Text>
                 </Flex>

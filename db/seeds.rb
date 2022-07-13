@@ -150,7 +150,7 @@ puts('Finished creating food data')
 puts('Creating trail data')
 
 Trail.create(
-    name: 'Vernal and Neveada Falls via Mist Trail',
+    name: 'Vernal and Nevada Falls via Mist Trail',
     proximity: '',
     mileage: 6,
     elevation_gain: 2162,
@@ -358,8 +358,9 @@ puts('Creating User Data!')
 5.times do
     User.create(
         email: Faker::Internet.email,
-        password_digest: 'Password1!',
-        password_confirmation: 'Password1!',
+        password: 'Password+1',
+        password_digest: 'Password+1',
+        password_confirmation: 'Password+1',
         name: Faker::Name.name,
         elite: false
     )

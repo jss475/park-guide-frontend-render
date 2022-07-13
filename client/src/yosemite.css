@@ -1,0 +1,74 @@
+.yosemite-title-container{
+    width: 100%;
+    /* height: 100%; */
+    text-align: center;
+    background-image: url("yosemite5.jpg");
+    background-size: 100% 100%; 
+    background-repeat: no-repeat;
+    object-fit: cover;
+    padding-top: 100px;
+    padding-bottom: 350px;
+    background-color: #ddd9d9;
+    background-blend-mode: multiply;
+    color: rgb(255, 255, 255);
+    z-index: 1
+    /* font-family: 'Cantora One', sans-serif; */
+}
+
+.yosemite-title{
+    /* font-family: 'Cantora One', sans-serif; */
+    /* font-family: "Oswald", sans-serif */
+    font-family: "Raleway", sans-serif
+}
+
+.yosemite-text{
+    /* font-family: "Oswald", sans-serif; */
+    /* background-color: rgb(114, 201, 114); */
+    border-radius: 10px;
+    font-family: "Raleway", sans-serif
+}
+
+.yosemite-about{
+    /* background-color: rgb(114, 201, 114); */
+    /* background-color: white; */
+    /* font-family: "Raleway", sans-serif */
+}
+
+.yosemite-image{
+    border-radius: 10px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.yosemite-list-container{
+    background-color: rgba(114, 201, 114, 0.427);
+}
+
+.fun-fact-item{
+    /* font-family: 'Cantora One', sans-serif; */
+    /* font-family: "Oswald", sans-serif; */
+    font-family: "Raleway", sans-serif;
+    /* background-color:rgb(114, 201, 114); */
+    border-radius: 10px;
+    padding: 5px
+}
+
+/* waterfall css */
+#waterfall-container {
+    box-shadow: inset 0 1px 0 #444, 0 -1px 0 #000;
+    height: 140px;
+    /* margin: -70px 0 0 -60px; */
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    width: 120px;
+  }
+  
+  canvas {
+       display: block;
+        margin: 0 auto;
+  }
+
+  /* body tag */
+ 
+
