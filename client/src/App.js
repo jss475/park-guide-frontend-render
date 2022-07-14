@@ -17,6 +17,7 @@ import NewLodgingForm from './components/NewLodgingForm';
 import UserPage from './components/UserPage';
 import About from './components/About';
 import Yosemite from './components/Yosemite'
+import ItineraryGenerator from './components/ItineraryGenerator';
 
 function App() {
 
@@ -80,6 +81,9 @@ function App() {
         </Route>
         <Route exact path = "/signup">
           <SignUp handleLSLoggedIn={handleLSLoggedIn}/>
+        </Route>
+        <Route exact path = "/yosemite/itinerary">
+          <ItineraryGenerator />
         </Route>
         <Route exact path = "/me">
           <UserPage />

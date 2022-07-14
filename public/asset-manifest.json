@@ -1,0 +1,32 @@
+{
+  "files": {
+    "main.css": "/static/css/main.9c863821.chunk.css",
+    "main.js": "/static/js/main.b8f80be3.chunk.js",
+    "main.js.map": "/static/js/main.b8f80be3.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.eba0e9a1.js",
+    "runtime-main.js.map": "/static/js/runtime-main.eba0e9a1.js.map",
+    "static/js/2.83a17df3.chunk.js": "/static/js/2.83a17df3.chunk.js",
+    "static/js/2.83a17df3.chunk.js.map": "/static/js/2.83a17df3.chunk.js.map",
+    "static/js/3.978e9a4a.chunk.js": "/static/js/3.978e9a4a.chunk.js",
+    "static/js/3.978e9a4a.chunk.js.map": "/static/js/3.978e9a4a.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/main.9c863821.chunk.css.map": "/static/css/main.9c863821.chunk.css.map",
+    "static/js/2.83a17df3.chunk.js.LICENSE.txt": "/static/js/2.83a17df3.chunk.js.LICENSE.txt",
+    "static/media/grand_canyon.3ee6f15c.jpg": "/static/media/grand_canyon.3ee6f15c.jpg",
+    "static/media/great_smokey2.2e893779.jpg": "/static/media/great_smokey2.2e893779.jpg",
+    "static/media/park_guide.47a720d9.svg": "/static/media/park_guide.47a720d9.svg",
+    "static/media/park_guide.edff78ee.gif": "/static/media/park_guide.edff78ee.gif",
+    "static/media/about.css": "/static/media/yosemite4.8604e0cd.jpg",
+    "static/media/yosemite1.4158bf41.jpg": "/static/media/yosemite1.4158bf41.jpg",
+    "static/media/yosemite2.450afa36.jpg": "/static/media/yosemite2.450afa36.jpg",
+    "static/media/yosemite.css": "/static/media/yosemite5.f5d6586b.jpg",
+    "static/media/yosemite6.52b8bd4d.jpg": "/static/media/yosemite6.52b8bd4d.jpg",
+    "static/media/zion.80e0231c.jpg": "/static/media/zion.80e0231c.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.eba0e9a1.js",
+    "static/js/2.83a17df3.chunk.js",
+    "static/css/main.9c863821.chunk.css",
+    "static/js/main.b8f80be3.chunk.js"
+  ]
+}

@@ -79,11 +79,12 @@ function NewFoodForm({isLoggedIn}){
                         <option value="African">African</option>
                         <option value="Asian">Asian</option>
                         <option value="American">American</option>
-                        <option value="Bakery">Bakery</option>
-                        <option value="Cafe">Cafe</option>
+                        <option value="Bakery">Bakery/Cafe</option>
+                        <option value="European">European</option>
                         <option value="Fast Food">Fast Food</option>
                         <option value="Grocery">Grocery</option>
                         <option value="Latin American">Latin American</option>
+                        <option value="Mediterranean">Mediterranean</option>
                     </Select>
                 </FormControl>
                 <FormControl isRequired mt="10px">
