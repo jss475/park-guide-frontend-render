@@ -70,7 +70,7 @@ function NavBar({isLoggedIn, handleLSLoggedIn}){
 
   return (
     <Box >
-      <Button className="navbar-text" ref={btnRef} leftIcon={<GiHamburgerMenu />}colorScheme='teal' onClick={onOpen} variant='outline' position="fixed" top="0" right = "0" m='4'>
+      <Button className="navbar-text" ref={btnRef} leftIcon={<GiHamburgerMenu />}colorScheme='red' backgroundColor="whiteAlpha.500" onClick={onOpen} variant='outline' position="fixed" top="0" right = "0" m='4'>
         Open
       </Button>
       <Drawer
@@ -156,7 +156,7 @@ function NavBar({isLoggedIn, handleLSLoggedIn}){
                   <Button className="navbar-text" colorScheme='blue' mr={3} onClick={()=> {
                     handleLoginClick()
                     onClose()
-                  }}>Sign In</Button>
+                  }}>Login</Button>
                   <Button className="navbar-text" colorScheme='blue' mr={3} onClick={()=> {
                     handleSignUpClick()
                     onClose()

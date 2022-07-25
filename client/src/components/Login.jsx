@@ -37,13 +37,13 @@ function Login({handleLSLoggedIn}){
             <form id="login-form" onSubmit={handleLogin}>
                 <FormControl>
                     <FormLabel>Email</FormLabel>
-                    <Input name="email" placeholder="Enter your email"/>
+                    <Input backgroundColor="white" borderColor="black" name="email" placeholder="Enter your email"/>
                 </FormControl>
                 <FormControl>
                     <FormLabel>Password</FormLabel>
-                    <Input name = "password" type = "password" placeholder="Enter your password"/>
+                    <Input backgroundColor="white" borderColor="black" name = "password" type = "password" placeholder="Enter your password"/>
                 </FormControl>
-                <Button mt = "15px" type="submit">Submit</Button>
+                <Button colorScheme="blue" mt = "15px" type="submit">Submit</Button>
             </form>
         </Box>
     )
