@@ -101,15 +101,15 @@ function NewLodgingForm({isLoggedIn}){
             <form id="new-lodging-form" onSubmit={handleNewLodgingSubmit}>
                 <FormControl isRequired>
                     <FormLabel>Name</FormLabel>
-                    <Input w="600px" backgroundColor="white" name="name" placeholder="Enter name of the place" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
+                    <Input w="600px" borderColor="black" backgroundColor="white" name="name" placeholder="Enter name of the place" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
                 </FormControl>
                 <FormControl isRequired w="300px" mt="10px">
                     <FormLabel>Address</FormLabel>
-                    <Input backgroundColor="white" name="address" placeholder="Enter the address" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
+                    <Input backgroundColor="white" borderColor="black" name="address" placeholder="Enter the address" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
                 </FormControl>
                 <FormControl isRequired w="300px" mt="10px">
                     <FormLabel>Website</FormLabel>
-                    <Input backgroundColor="white" name = "website" placeholder="Enter the website" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
+                    <Input backgroundColor="white" borderColor="black" name = "website" placeholder="Enter the website" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
                 </FormControl>
                 <Flex mt="15px">
                     <FormControl>
@@ -154,7 +154,7 @@ function NewLodgingForm({isLoggedIn}){
                 </Flex>
                 <FormControl isRequired  mt="10px">
                     <FormLabel>Picture</FormLabel>
-                    <Input backgroundColor="white" name = "image" placeholder="Enter URL for picture" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
+                    <Input backgroundColor="white" borderColor="black" name = "image" placeholder="Enter URL for picture" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
                 </FormControl>
                 {/* Disable button when not logged in */}
                 <Button colorScheme="blue" disabled={disabled_val} type="submit" mt="15px" mb="50px">Submit</Button>

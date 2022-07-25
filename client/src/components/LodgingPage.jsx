@@ -45,7 +45,7 @@ function LodgingPage({isLoggedIn}){
 
     ///////////////////////////////////  CREATING MAPS     /////////////////////////////////////////////////////////////
     //hide the API key for google maps
-    const {isLoaded} = useLoadScript({googleMapsApiKey: process.env.REACT_APP_NEXT_PUBLIC_GOOGLE_MAPS_API_KEY})
+    const {isLoaded} = useLoadScript({googleMapsApiKey: "AIzaSyCXVWFVfSaFjIvSik2mxgwdo_tEyRQKmcg"})
     
     //create state to take in the lat and long of the address
     const [latlong, setLatlong] = useState({lat: "", lng: ""})
@@ -55,11 +55,14 @@ function LodgingPage({isLoggedIn}){
         const data = async () => {
             if(address){
                 let added_plus = address.split(' ').join('+')
-                let req = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?new_forward_geocoder=true&address=${added_plus}&key=${process.env.REACT_APP_NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`);
+                let req = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?new_forward_geocoder=true&address=${added_plus}&key=AIzaSyCrpgYxdZIWNFA8ahKCUt9-94SCnTUS7EQ`);
 
                 if (req.ok){
                     let res = await req.json()
-                    setLatlong(res.results[0].geometry.location)
+                    if(res){
+                        setLatlong(res.results[0].geometry.location)
+                    }
+                    
                 }
             }
         } 

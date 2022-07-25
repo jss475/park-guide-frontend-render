@@ -42,27 +42,27 @@ function SignUp({handleLSLoggedIn}){
             <form id="signup-form" onSubmit={handleSignUp}>
                 <FormControl isRequired>
                     <FormLabel>Name</FormLabel>
-                    <Input name="name" placeholder="Enter Your Name"/>
+                    <Input backgroundColor="white" borderColor="black" name="name" placeholder="Enter Your Name"/>
                 </FormControl>
                 <FormControl isRequired>
                     <FormLabel htmlFor="email">Email</FormLabel>
-                    <Input name="email" placeholder="Enter your Email"/>
+                    <Input backgroundColor="white" borderColor="black" name="email" placeholder="Enter your Email"/>
                 </FormControl>
                 <FormControl isRequired>
                     <FormLabel>Password</FormLabel>
-                    <Input name = "password" type="password" placeholder="Enter your Password"/>
+                    <Input backgroundColor="white" borderColor="black" name = "password" type="password" placeholder="Enter your Password"/>
 
                 </FormControl>
                 <FormControl isRequired>
                     <FormLabel>Password Confirmation</FormLabel>
-                    <Input name = "password_confirmation" type="password" placeholder="Confirm your Password"/>
+                    <Input backgroundColor="white" borderColor="black" name = "password_confirmation" type="password" placeholder="Confirm your Password"/>
                     <FormHelperText>Must be minimum 8 characters</FormHelperText>
                     <FormHelperText>Must contain at least 1 uppercase</FormHelperText>
                     <FormHelperText>Must contain at least 1 lowercase</FormHelperText>
                     <FormHelperText>Must contain a special character</FormHelperText>
                     <FormHelperText>Must contain at least 1 number</FormHelperText>
                 </FormControl>
-                <Button mt="15px" type="submit">Submit</Button>
+                <Button colorScheme="blue" mt="15px" type="submit">Submit</Button>
             </form>
         </Box>
     )

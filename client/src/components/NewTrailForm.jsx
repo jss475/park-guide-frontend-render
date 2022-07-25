@@ -77,24 +77,24 @@ function NewTrailForm({isLoggedIn}){
             <form id="new-trail-form" onSubmit={handleNewTrailSubmit}>
                 <FormControl isRequired>
                     <FormLabel>Name</FormLabel>
-                    <Input backgroundColor="white" name="name" placeholder="Enter Name of the Trail" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
+                    <Input backgroundColor="white" borderColor="black" name="name" placeholder="Enter Name of the Trail" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
                 </FormControl>
                 <FormControl isRequired w="300px" mt="10px">
                     <FormLabel>Mileage</FormLabel>
-                    <Input backgroundColor="white" name="mileage" placeholder="Enter the length of the trail (mi)" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
+                    <Input backgroundColor="white" borderColor="black" name="mileage" placeholder="Enter the length of the trail (mi)" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
                 </FormControl>
                 <Flex flexWrap="inline">       
                     <FormControl isRequired w="300px" mt="10px">
                         <FormLabel>Starting Elevation</FormLabel>
                         <InputGroup>
-                            <Input backgroundColor="white" name = "starting_elevation" placeholder="Enter the starting elevation" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
+                            <Input backgroundColor="white" borderColor="black" name = "starting_elevation" placeholder="Enter the starting elevation" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
                             <InputRightAddon children="ft"></InputRightAddon>
                         </InputGroup>
                     </FormControl>
                     <FormControl isRequired w="300px" mt="10px" ml="25px">
                         <FormLabel>Elevation Gain</FormLabel>
                         <InputGroup>
-                            <Input backgroundColor="white" name = "elevation_gain" placeholder="Enter the elevation gain" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
+                            <Input backgroundColor="white" borderColor="black" name = "elevation_gain" placeholder="Enter the elevation gain" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
                             <InputRightAddon children="ft"></InputRightAddon>
                         </InputGroup>
                     </FormControl>
@@ -102,24 +102,24 @@ function NewTrailForm({isLoggedIn}){
                 <Flex flexWrap="inline">
                     <FormControl isRequired w="300px" mt="10px">
                         <FormLabel>Starting Latitude</FormLabel>
-                        <Input backgroundColor="white" name = "starting_lat" placeholder="Enter the starting latitude" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
+                        <Input backgroundColor="white" borderColor="black" name = "starting_lat" placeholder="Enter the starting latitude" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
                     </FormControl>
                     <FormControl isRequired w="300px" mt="10px" ml="25px">
                         <FormLabel>Starting Longitude</FormLabel>
-                        <Input backgroundColor="white" name = "starting_long" placeholder="Enter the starting longitude" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
+                        <Input backgroundColor="white" borderColor="black" name = "starting_long" placeholder="Enter the starting longitude" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}/>
                     </FormControl>
                 </Flex>
                 <Flex flexWrap="inline">               
                     <FormControl isRequired w="300px" mt="10px"> 
                         <FormLabel>Route Type</FormLabel>
-                        <Select backgroundColor="white" name="route_type" placeholder = 'Select the route type' onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}>
+                        <Select backgroundColor="white" borderColor="black" name="route_type" placeholder = 'Select the route type' onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}>
                             <option value="Out & Back">Out & Back</option>
                             <option value="Loop">Loop</option>
                         </Select>
                     </FormControl>
                     <FormControl isRequired w="300px" ml="25px" mt="10px">
                         <FormLabel>Difficulty</FormLabel>
-                        <Select backgroundColor="white" name="difficulty" placeholder = 'Select the difficulty' onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}>
+                        <Select backgroundColor="white" borderColor="black" name="difficulty" placeholder = 'Select the difficulty' onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}>
                             <option value="Extremely Hard">Extremely Hard</option>
                             <option value="Hard">Hard</option>
                             <option value="Medium">Medium</option>
@@ -131,7 +131,7 @@ function NewTrailForm({isLoggedIn}){
                         <InputGroup name="estimated_time" onChange={(e)=> {
                             handleTimeInput(e) 
                         }}>
-                            <Input backgroundColor="white" name="hr" placeholder="hr"></Input>
+                            <Input backgroundColor="white" borderColor="black" name="hr" placeholder="hr"></Input>
                             <InputRightAddon children=" hr"></InputRightAddon>
                             <Input backgroundColor="white" name = "min" placeholder="min"></Input>
                             <InputRightAddon > min</InputRightAddon>
@@ -143,7 +143,7 @@ function NewTrailForm({isLoggedIn}){
                 <Flex flexWrap="inline">                
                     <FormControl isRequired w="300px" mt="10px">
                         <FormLabel>Recommended Water</FormLabel>
-                        <Select backgroundColor="white" name="water" placeholder = 'Select the water needed (L)' onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}>
+                        <Select backgroundColor="white" borderColor="black" name="water" placeholder = 'Select the water needed (L)' onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}>
                             <option value="1">1L</option>
                             <option value="2">2L</option>
                             <option value="3">3L</option>
@@ -152,7 +152,7 @@ function NewTrailForm({isLoggedIn}){
                     </FormControl>
                     <FormControl isRequired w="300px" ml="25px" mt="10px">
                         <FormLabel>Recommended Food</FormLabel>
-                        <Select backgroundColor="white" name="food" placeholder = 'Select the food needed' onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}>
+                        <Select backgroundColor="white" borderColor="black" name="food" placeholder = 'Select the food needed' onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: e.target.value})}>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -166,7 +166,7 @@ function NewTrailForm({isLoggedIn}){
                 </Flex>
                 <FormControl isRequired mt="10px">
                     <FormLabel>Pictures</FormLabel>
-                    <Input backgroundColor="white" name = "pictures" placeholder="Enter the pictures" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: [e.target.value]})}/>
+                    <Input backgroundColor="white" borderColor="black" name = "pictures" placeholder="Enter the pictures" onChange={(e)=> setAllInputs({...allInputs, [e.target.name]: [e.target.value]})}/>
                 </FormControl>
                 {/* Disable button when not logged in */}
                 <Button colorScheme="blue" disabled={disabled_val} type="submit" mt="15px" mb="50px">Submit</Button>
