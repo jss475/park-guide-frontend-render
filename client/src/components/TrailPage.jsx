@@ -78,7 +78,7 @@ function TrailPage({isLoggedIn}){
     //refactor the trail data
     const {name, proximity, mileage, elevation_gain, starting_elevation, starting_lat, starting_long, ending_lat, ending_long, route_type, difficulty, estimated_time, water, food, pictures, upvote, downvote, user_trails} = trailData
 
-    //creating the google map
+    //creating the google map//
     let map
     if(!isLoaded){
         map = <div>Loading...</div>
