@@ -44,7 +44,7 @@ function FoodPage({isLoggedIn}){
     ///////////////////////////////////  CREATING MAPS     /////////////////////////////////////////////////////////////
     //hide the API key for google maps
     const {isLoaded} = useLoadScript({googleMapsApiKey: "AIzaSyCXVWFVfSaFjIvSik2mxgwdo_tEyRQKmcg"})
-    
+    console.log("AIzaSyCXVWFVfSaFjIvSik2mxgwdo_tEyRQKmcg")
     //create state to take in the lat and long of the address
     const [latlong, setLatlong] = useState({lat: '', lng: ''})
 
