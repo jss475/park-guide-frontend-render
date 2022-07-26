@@ -145,7 +145,7 @@ function LodgingPage({isLoggedIn}){
         
         if(filtered_output && temp_low_filtered){
             //if it's night time do temp_low_filtered first
-            if((current_hour >= 18 && current_hour <= 24) || (current_hour >=0 && current_hour <= 6)){
+            if((current_hour >= 20 && current_hour <= 24) || (current_hour >=0 && current_hour <= 6)){
                 //map the JSX data
                 temp_low_filtered.pop()
                 temp_low_filtered.unshift(filtered_output[0])
