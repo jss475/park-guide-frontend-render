@@ -56,6 +56,8 @@ Users can:
 
 I've built this website using a scaffold that I forked from Flatiron School in order to make it compatible with Heroku.
 
+The contributor spam9999 on Github is also me!
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
