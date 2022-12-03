@@ -1,118 +1,134 @@
-<a name="readme-top"></a>
-<!--
-*** Used the Best-README-Template.
--->
+# Park Guide
+> A national park trip planning application focused on curating and delivering the best trip experience for users.
 
+## Table of contents
+* [General info](#general-info)
+* [Project Demo](#project-demo)
+* [Technologies](#technologies)
+* [Setup](#setup)
+* [Features](#features)
+* [Inspiration](#inspiration)
+* [Contact](#contact)
 
-<!-- PROJECT LOGO -->
-<br />
+## General info
+Park Guide is an easy to use national park planning application that helps provide users with the best experience possible. Users can find lodging, food, and trail information for Yosemite National Park. 
+
+<div align="center">Welcome to Park Guide. </div>
 <div align="center">
-  <a href="https://github.com/jss475/phase-5-project">
-    <img src="./client/public/park_guide.svg" alt="Logo" width="150" height="150">
-  </a>
-
-  <h1 align="center">Park Guide</h3>
-
+<img src="./client/public/park_guide.svg" alt="Logo" width="150" height="150">
+</div>
+<br/>
+<div align="center">
+<kbd>
+<img src="./client/public/screen_shot.png">
+</kbd>
 </div>
 
+<br/>
+<div align="center">
+<kbd>
+<img src="./Trail_page.png">
+</kbd>
+</div>
+
+## Project Demo 
+[Click to view site](pacific-basin-76343.herokuapp.com/)
+
+## Technologies
+### Backend Development 
+* Ruby
+* Ruby on Rails
+* PostgreSQL
+
+### Frontend Development 
+* JavaScript
+* HTML
+* CSS
+* React.js
+* React-DOM
+* React-Router-DOM
+* Chakra-UI
+* Google Maps API
+* Weather.gov API
+
+## Setup
+To try out this project: 
+1. Clone the GitHub repository locally to your computer
+1. In the command line, navigate to the root directory of the repository, and type the following: 
+  $ npm install 
+1. Navigate to the client folder, and in the root directory of the client folder, type the following: 
+  $ npm install 
+1. In the client folder, and in the root directory of the client folder, type the following: 
+  $ npm start
+1. Navigate back to the root directory of this project, type the following:
+  $ bundle install
+1. In the root directory of this project, start the server by typing the following: 
+  $ rails s
+
+## Code Examples
+### Ruby/Rails
+```Rails
+def special_create
+  user_id =uf_params[:user_id]
+  food_id = uf_params[:food_id]
+  uf_w_all = UserFood.find_by user_id: user_id, food_id: food_id
+
+  
+  if uf_w_all
+      uf_instance = uf_w_all
+      uf_instance.update(uf_params)
+      
+  else
+      uf_instance = UserFood.create(uf_params)
+  end
+  render json: uf_instance, status: :created
+end
+```
+
+### JavaScript/React.js 
+```React.js
+const [weatherData, setWeatherData] = useState([])
+useEffect(() => {
+    const getWeatherData = async() => {
+        let req = await fetch(`https://api.weather.gov/points/${starting_lat},${starting_long}`);
+        console.log(req)
+        if(req.ok){
+            let res = await req.json()
+            // console.log(res)
+            const get_forecast = async() => {
+                let w_req = await fetch(res.properties.forecast)    
+            
+                if(w_req.ok){
+                    let data = await w_req.json()
+                    setWeatherData(data.properties.periods)
+                }
+            }
+            get_forecast()
+        }
+    }
+    if(starting_lat % 1 !==0){
+        getWeatherData()
+    }
+        
+},[starting_lat, starting_long])
+```
 
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contact">Contact</a></li>
+## Features
+* Full stack web application utilizing React.js and Ruby on Rails
+* Authorization and authenication implemented with bcrypt. 
+* Front-End styles built with Chakra.UI and CSS.
+* Users can create account through application. 
+* Users can upvote, downvote, comment, and favorite lodging, trails, and restaurants.
+* Locations and weather data for lodging, trails, and restaurants are displayed.
 
-  </ol>
-</details>
+## Status
+Project is finished with option to expand functionality and to refactor code. 
 
+## Inspiration
+The inspiration for Park Guide came from the times I tried to plan a trip to a national park. I was frustrated by the lack of consolidated data and a way for me to know what was highly rated at the park. I decided to create Park Guide to try and help alleviate that for people that wanted to see the beauty of national parks in the US.
 
-
-<!-- ABOUT THE PROJECT -->
-## About The Project
-
-[![Product Name Screen Shot][page-demo]]("https://pacific-basin-76343.herokuapp.com/")
-
-Have you ever had difficulties when trying to plan a trip to a national park/nature site?
-
-If so, Park Guide might be what you need!
-
-Park Guide is a national park trip planning website focused on the user experience and the opinions of those users.
-
-Users can:
-* Upvote, downvote, and favorite the different lodging, trails, and restaurants in the area
-* Upload lodging, trails, and restaurants when new ones are added
-* See how much water and food they should bring to trails
-* See what the weather is like at those locations
-
-
-I've built this website using a scaffold that I forked from Flatiron School in order to make it compatible with Heroku.
-
-The contributor spam9999 on Github is also me!
-
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-### Built With
-
-<ol>
-    <li>React</li>
-    <li>Javascript</li>
-    <li>Ruby</li>
-    <li>Ruby on Rails</li>
-    <li>Chakra UI</li>
-    <li>Google Maps API</li>
-    <li>Weather.gov API</li>
-</ol>
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- USAGE EXAMPLES -->
-## Usage
-
-Please feel free to try and break my website and let me know what you find!
-
-If you want to learn how to use the Google Maps API, check out my blog post here: https://dev.to/jss475/google-maps-with-react-4n1o
-
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [ ] Flush Out Submit Validations
-- [ ] Add More National Parks
-- [ ] Switch weather APIs
-- [ ] Mobile Phone Compatible
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- CONTACT -->
 ## Contact
+Created by [Joseph Shin](https://www.linkedin.com/in/joseph-sw-shin/) 
+Feel free to contact me for any questions! 
 
-Joseph Shin - shin.seung.won@gmail.com
-
-Project Link: [https://github.com/jss475/phase-5-project](https://github.com/jss475/phase-5-project)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
-[page-demo]: ./client/public/screen_shot.png
-[Ruby_img]: https://www.ruby-lang.org/images/header-ruby-logo.png
-[Ruby-url]: https://www.ruby-lang.org/en/
