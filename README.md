@@ -115,7 +115,7 @@ useEffect(() => {
 
 
 ## Features
-* Full stack web application utilizing React.js and Ruby on Rails
+* Full stack web application utilizing React.js and Ruby on Rails.
 * Authorization and authenication implemented with bcrypt. 
 * Front-End styles built with Chakra.UI and CSS.
 * Users can create account through application. 
