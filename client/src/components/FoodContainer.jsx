@@ -7,7 +7,7 @@ function FoodContainer(){
     const [allFoods, setAllFoods] = useState([])
     //fetch the food data
     useEffect(()=> {
-        fetch("/foods")
+        fetch("https://park-guide.onrender.com/foods")
             .then(res => res.json())
             .then(data => setAllFoods(data))
     },[])

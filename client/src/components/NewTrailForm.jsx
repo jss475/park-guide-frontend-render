@@ -25,7 +25,7 @@ function NewTrailForm({isLoggedIn}){
         e.preventDefault()
         // let form = new FormData(document.querySelector("#new-trail-form"))
     
-        let req = await fetch("/trails", {
+        let req = await fetch("https://park-guide.onrender.com/trails", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'

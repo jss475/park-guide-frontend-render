@@ -43,7 +43,7 @@ function NavBar({isLoggedIn, handleLSLoggedIn}){
 
   //handle the logout click
   const handleLogOut= async () => {
-    await fetch('/logout', {
+    await fetch('https://park-guide.onrender.com/logout', {
       method: "DELETE"
     });
     handleLSLoggedIn(false)

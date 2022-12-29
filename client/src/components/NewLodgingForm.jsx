@@ -33,7 +33,7 @@ function NewLodgingForm({isLoggedIn}){
     const handleNewLodgingSubmit = async (e) => {
         e.preventDefault()
 
-        let req = await fetch("/lodgings", {
+        let req = await fetch("https://park-guide.onrender.com/lodgings", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

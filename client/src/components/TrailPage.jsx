@@ -67,7 +67,7 @@ function TrailPage({isLoggedIn}){
     //useParams for id
     //pull the trail data for just the one trail
     useEffect(()=> {
-        fetch(`/trails/${id}`)
+        fetch(`https://park-guide.onrender.com/trails/${id}`)
             .then(res => res.json())
             .then(data => setTrailData(data))
     },[id])
@@ -217,7 +217,7 @@ function TrailPage({isLoggedIn}){
         }
 
     
-        fetch(`/user_trails/upvote`,configObj)
+        fetch(`https://park-guide.onrender.com/user_trails/upvote`,configObj)
             .then(res => res.json())
             .then(data => {
                 if(data.error){
@@ -250,7 +250,7 @@ function TrailPage({isLoggedIn}){
         }
 
     
-        fetch(`/user_trails/downvote`,configObj)
+        fetch(`https://park-guide.onrender.com/user_trails/downvote`,configObj)
             .then(res => res.json())
             .then(data => {
                 if(data.error){
@@ -283,7 +283,7 @@ function TrailPage({isLoggedIn}){
                 review: reviewAdded,
             })
         }
-        fetch('/user_trails/', configObj)
+        fetch('https://park-guide.onrender.com/user_trails/', configObj)
             .then(res => res.json())
             .then(data => {
 
@@ -342,7 +342,7 @@ function TrailPage({isLoggedIn}){
             })
         }
 
-        fetch('/user_trails', configObj)
+        fetch('https://park-guide.onrender.com/user_trails', configObj)
             .then(res => res.json())
             .then(data => {
                 

@@ -7,7 +7,7 @@ function LodgingContainer(){
     const [allLodging, setAllLodging] = useState([])
     useEffect(()=> {
         const getLodging = async () => {
-            let req = await fetch('/lodgings')
+            let req = await fetch('https://park-guide.onrender.com/lodgings')
 
             if (req.ok){
                 let res = await req.json()

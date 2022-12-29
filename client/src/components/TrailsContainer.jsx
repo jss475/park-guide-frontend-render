@@ -8,7 +8,7 @@ function TrailsContainer() {
     const [allTrails, setAllTrails] = useState([])
 
     useEffect(()=> {
-        fetch("/trails")
+        fetch("https://park-guide.onrender.com/trails")
             .then(res => res.json())
             .then(data => setAllTrails(data))
     },[])

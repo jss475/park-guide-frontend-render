@@ -29,7 +29,7 @@ function FoodPage({isLoggedIn}){
     //pull the food data for just the one food
     useEffect(()=> {
         const getFood = async () => {
-            let req = await fetch(`/foods/${id}`);
+            let req = await fetch(`https://park-guide.onrender.com/foods/${id}`);
         
             if (req.ok) {
                 let res = await req.json();
@@ -196,7 +196,7 @@ function FoodPage({isLoggedIn}){
         }
 
     
-        fetch(`/user_foods/upvote`,configObj)
+        fetch(`https://park-guide.onrender.com/user_foods/upvote`,configObj)
             .then(res => res.json())
             .then(data => {
                 if(data.error){
@@ -229,7 +229,7 @@ function FoodPage({isLoggedIn}){
         }
 
     
-        fetch(`/user_foods/downvote`,configObj)
+        fetch(`https://park-guide.onrender.com/user_foods/downvote`,configObj)
             .then(res => res.json())
             .then(data => {
                 if(data.error){
@@ -266,7 +266,7 @@ function FoodPage({isLoggedIn}){
                 review: reviewAdded,
             })
         }
-        fetch('/user_foods/', configObj)
+        fetch('https://park-guide.onrender.com/user_foods/', configObj)
         .then(res => res.json())
         .then(data => {
             let filter_id
@@ -323,7 +323,7 @@ function FoodPage({isLoggedIn}){
             })
         }
 
-        fetch('/user_foods', configObj)
+        fetch('https://park-guide.onrender.com/user_foods', configObj)
             .then(res => res.json())
             .then(data => {
                 

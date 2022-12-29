@@ -16,15 +16,15 @@ function ItineraryGenerator(){
 
     //fetch the data for trails, lodging, and food
     useEffect(()=> {
-        fetch('/trails')
+        fetch('https://park-guide.onrender.com/trails')
         .then(res => res.json())
         .then(data => setTrailData(data))
 
-        fetch('/foods')
+        fetch('https://park-guide.onrender.com/foods')
         .then(res => res.json())
         .then(data => setFoodData(data))
 
-        fetch('/lodgings')
+        fetch('https://park-guide.onrender.com/lodgings')
         .then(res => res.json())
         .then(data => setLodgingData(data))
 

@@ -29,7 +29,7 @@ function UserPage(){
     useEffect(()=> {
         let user_id = localStorage.getItem("id")
         const getUser = async () => {
-        let req = await fetch(`/users/${user_id}`)
+        let req = await fetch(`https://park-guide.onrender.com/users/${user_id}`)
 
         if (req.ok) {
             let res = await req.json()

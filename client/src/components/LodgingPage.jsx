@@ -28,7 +28,7 @@ function LodgingPage({isLoggedIn}){
     //pull the lodging data for just the one lodging
     useEffect(()=> {
         const getLodging = async () => {
-            let req = await fetch(`/lodgings/${id}`);
+            let req = await fetch(`https://park-guide.onrender.com/lodgings/${id}`);
         
             if (req.ok) {
                 let res = await req.json();
@@ -208,7 +208,7 @@ function LodgingPage({isLoggedIn}){
         }
 
     
-        fetch(`/user_lodgings/upvote`,configObj)
+        fetch(`https://park-guide.onrender.com/user_lodgings/upvote`,configObj)
             .then(res => res.json())
             .then(data => {
                 if(data.error){
@@ -241,7 +241,7 @@ function LodgingPage({isLoggedIn}){
         }
 
     
-        fetch(`/user_lodgings/downvote`,configObj)
+        fetch(`https://park-guide.onrender.com/user_lodgings/downvote`,configObj)
             .then(res => res.json())
             .then(data => {
                 if(data.error){
@@ -277,7 +277,7 @@ function LodgingPage({isLoggedIn}){
             })
         }
 
-        fetch('/user_lodgings/', configObj)
+        fetch('https://park-guide.onrender.com/user_lodgings/', configObj)
         .then(res => res.json())
         .then(data => {
             let filter_id
@@ -339,7 +339,7 @@ function LodgingPage({isLoggedIn}){
                 })
             }
 
-            fetch('/user_lodgings', configObj)
+            fetch('https://park-guide.onrender.com/user_lodgings', configObj)
                 .then(res => res.json())
                 .then(data => {
                     

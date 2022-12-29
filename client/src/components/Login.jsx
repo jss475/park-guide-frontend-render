@@ -15,7 +15,7 @@ function Login({handleLSLoggedIn}){
 
         let form = new FormData(document.querySelector("#login-form"))
 
-        let req = await fetch("/login", {
+        let req = await fetch("https://park-guide.onrender.com/login", {
             method: "POST",
             body: form
         })

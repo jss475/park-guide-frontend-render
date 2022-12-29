@@ -24,7 +24,7 @@ function NewFoodForm({isLoggedIn}){
         let form = new FormData(document.querySelector("#new-food-form"))
         //append website if needed
 
-        let req = await fetch("/foods", {
+        let req = await fetch("https://park-guide.onrender.com/foods", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
